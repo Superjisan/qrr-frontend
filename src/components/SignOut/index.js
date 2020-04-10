@@ -1,20 +1,21 @@
 import React from 'react';
 import { ApolloConsumer } from 'react-apollo';
+import Button from '@material-ui/core/Button';
 
 import * as routes from '../../constants/routes';
 import history from '../../constants/history';
 
 const SignOutButton = () => (
   <ApolloConsumer>
-    {client => (
-      <button type="button" onClick={() => signOut(client)}>
+    {(client) => (
+      <Button color="inherit" type="button" onClick={() => signOut(client)}>
         Sign Out
-      </button>
+      </Button>
     )}
   </ApolloConsumer>
 );
 
-const signOut = client => {
+const signOut = (client) => {
   localStorage.removeItem('token');
   client.resetStore();
   history.push(routes.SIGN_IN);

@@ -16,9 +16,6 @@ const App = ({ session, refetch }) => (
   <Router history={history}>
     <div>
       <Navigation session={session} />
-
-      <hr />
-
       <Route
         exact
         path={routes.LANDING}

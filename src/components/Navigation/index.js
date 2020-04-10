@@ -1,7 +1,6 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import Link from '@material-ui/core/Link';
+// import Link from '@material-ui/core/Link';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -41,32 +40,14 @@ const NavigationAuth = ({ session }) => {
       <AppBar>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            News
+            QR^2
           </Typography>
           <SignOutButton />
         </Toolbar>
       </AppBar>
+      <Toolbar />
     </div>
   );
-  //   <ul>
-  //     <li>
-  //       <Link to={routes.LANDING}>Landing</Link>
-  //     </li>
-  //     <li>
-  //       <Link to={routes.ACCOUNT}>Account ({session.me.username})</Link>
-  //     </li>
-  //     {session &&
-  //       session.me &&
-  //       session.me.role === 'ADMIN' && (
-  //         <li>
-  //           <Link to={routes.ADMIN}>Admin</Link>
-  //         </li>
-  //       )}
-  //     <li>
-  //       <SignOutButton />
-  //     </li>
-  //   </ul>
-  // )
 };
 
 const NavigationNonAuth = () => {
@@ -79,12 +60,11 @@ const NavigationNonAuth = () => {
             QR^2
           </Typography>
           <Typography>
-            <Link href={`${routes.SIGN_IN}`}>
-              <Button>Sign In</Button>
-            </Link>
+            <Button color="primary.contrastText" href={`${routes.SIGN_IN}`}>Sign In</Button>
           </Typography>
         </Toolbar>
       </AppBar>
+      <Toolbar />
     </div>
   );
 };
