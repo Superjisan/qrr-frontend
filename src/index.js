@@ -2,14 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
-import { ApolloLink} from 'apollo-link';
+import { ApolloLink } from 'apollo-link';
 import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import {
+  createMuiTheme,
+  ThemeProvider,
+} from '@material-ui/core/styles';
 
+import materialUiTheme from './constants/theme';
 import App from './components/App';
 import { signOut } from './components/SignOut';
 
+// APOLLO CONFIGs
 const httpLink = new HttpLink({
   uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
 });
@@ -57,9 +63,14 @@ const client = new ApolloClient({
   cache,
 });
 
+// MATERIAL-UI
+const theme = createMuiTheme(materialUiTheme);
+
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <App />
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
   </ApolloProvider>,
   document.getElementById('root'),
 );
