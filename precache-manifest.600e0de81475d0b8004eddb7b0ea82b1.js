@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "3d23fbcfa76655021f68d4bace955f20",
+    "revision": "1b1611ce4da60b7a893b09b90e712807",
     "url": "/qrr-frontend/index.html"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/qrr-frontend/static/js/2.7d2ecb88.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "226b4e80fa403cb84e90",
-    "url": "/qrr-frontend/static/js/main.55b682b2.chunk.js"
+    "revision": "c2f2c49a7a8e489d0b33",
+    "url": "/qrr-frontend/static/js/main.a20e3935.chunk.js"
   },
   {
     "revision": "676241d4ac79a70859f2",
