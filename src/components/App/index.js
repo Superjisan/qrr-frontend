@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Route } from 'react-router-dom';
+import { Router, Route, createHistory } from 'react-router-dom';
 
 import Navigation from '../Navigation';
 import LandingPage from '../Landing';
@@ -13,7 +13,7 @@ import * as routes from '../../constants/routes';
 import history from '../../constants/history';
 
 const App = ({ session, refetch }) => (
-  <HashRouter basename="/qrr-frontend" history={history}>
+  <Router history={history}>
     <div>
       <Navigation session={session} />
       <Route
@@ -42,7 +42,7 @@ const App = ({ session, refetch }) => (
         component={() => <AdminPage />}
       />
     </div>
-  </HashRouter>
+  </Router>
 );
 
 export default withSession(App);
