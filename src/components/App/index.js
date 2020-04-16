@@ -13,7 +13,7 @@ import * as routes from '../../constants/routes';
 import history from '../../constants/history';
 
 const App = ({ session, refetch }) => (
-  <Router history={history}>
+  <Router history={history} basename={process.env.PUBLIC_URL}>
     <div>
       <Navigation session={session} />
       <Route
