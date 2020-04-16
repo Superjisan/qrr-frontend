@@ -13,7 +13,7 @@ import * as routes from '../../constants/routes';
 import history from '../../constants/history';
 
 const App = ({ session, refetch }) => (
-  <HashRouter basename="/" history={history}>
+  <HashRouter basename="/qrr-frontend" history={history}>
     <div>
       <Navigation session={session} />
       <Route
