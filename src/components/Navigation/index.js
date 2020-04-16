@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-// import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -60,7 +60,9 @@ const NavigationNonAuth = () => {
             QR^2
           </Typography>
           <Typography>
-            <Button color="primary.contrastText" href={`${routes.SIGN_IN}`}>Sign In</Button>
+            <Link to={routes.SIGN_IN}>
+              <Button color="primary.contrastText">Sign In</Button>
+            </Link>
           </Typography>
         </Toolbar>
       </AppBar>
