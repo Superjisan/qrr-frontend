@@ -61,7 +61,7 @@ const NavigationNonAuth = () => {
           </Typography>
           <Typography>
             <Link to={routes.SIGN_IN}>
-              <Button color="primary.contrastText">Sign In</Button>
+              <Button color="primary">Sign In</Button>
             </Link>
           </Typography>
         </Toolbar>

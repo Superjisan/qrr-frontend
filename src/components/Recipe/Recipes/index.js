@@ -3,8 +3,9 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 
 const GET_ALL_RECIPES = gql`
-  query() {
+  query {
     recipes {
+        id
         name
         author{
           username
@@ -28,11 +29,23 @@ const GET_ALL_RECIPES = gql`
 `;
 
 
-const Recipes = props => {
+export const Recipes = props => {
     return (
         <Query query={GET_ALL_RECIPES}>
             {props => {
-                
+                const {data} = props;
+                console.log({data, props})
+                return(
+                  <div>
+                    Recipes
+                    {data.recipes && data.recipes.map(recipe => {
+                      return (
+                        <li key={recipe.id}>{recipe.name}</li>
+                      )
+                    })}
+                    
+                  </div>
+                )
             }}
         </Query>
     )
