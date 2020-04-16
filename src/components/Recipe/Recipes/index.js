@@ -37,7 +37,6 @@ export const Recipes = props => {
                 console.log({data, props})
                 return(
                   <div>
-                    Recipes
                     {data.recipes && data.recipes.map(recipe => {
                       return (
                         <li key={recipe.id}>{recipe.name}</li>

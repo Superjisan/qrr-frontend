@@ -6,7 +6,7 @@ import {Recipes} from "../Recipe/Recipes/"
 
 const Landing = ({ session }) => (
   <div>
-    <h2>Landing Page</h2>
+    <h2>Recipes</h2>
     <Recipes />
   </div>
 );
