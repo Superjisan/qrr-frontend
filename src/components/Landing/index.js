@@ -1,13 +1,13 @@
 import React from 'react';
 
 import withSession from '../Session/withSession';
-import {Recipes} from "../Recipe/Recipes/"
+import Recipes from "../Recipe/Recipes/"
 
 
 const Landing = ({ session }) => (
   <div>
     <h2>Recipes</h2>
-    <Recipes />
+    <Recipes session={session} />
   </div>
 );
 

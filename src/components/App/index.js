@@ -7,6 +7,8 @@ import SignUpPage from '../SignUp';
 import SignInPage from '../SignIn';
 import AccountPage from '../Account';
 import AdminPage from '../Admin';
+import RecipeCreate from '../Recipe/RecipeCreate';
+
 import withSession from '../Session/withSession';
 
 import * as routes from '../../constants/routes';
@@ -40,6 +42,11 @@ const App = ({ session, refetch }) => (
         exact
         path={routes.ADMIN}
         component={() => <AdminPage />}
+      />
+      <Route
+        exact
+        path={routes.ADD_RECIPE}
+        component={() => <RecipeCreate />}
       />
     </div>
   </Router>

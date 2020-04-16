@@ -42,7 +42,9 @@ const NavigationAuth = ({ session }) => {
           <Typography variant="h6" className={classes.title}>
             QR^2
           </Typography>
-          <SignOutButton />
+          <Typography>
+            <SignOutButton />
+          </Typography>
         </Toolbar>
       </AppBar>
       <Toolbar />
@@ -61,7 +63,7 @@ const NavigationNonAuth = () => {
           </Typography>
           <Typography>
             <Link to={routes.SIGN_IN}>
-              <Button color="primary">Sign In</Button>
+              <Button color="contrastText">Sign In</Button>
             </Link>
           </Typography>
         </Toolbar>

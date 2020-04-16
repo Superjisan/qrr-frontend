@@ -4,18 +4,15 @@ import gql from 'graphql-tag';
 
 import ErrorMessage from '../../Error';
 
-const CREATE_MESSAGE = gql`
-  mutation($text: String!) {
-    createMessage(text: $text) {
-      id
-      text
-      createdAt
-      user {
-        id
-        username
-      }
+const ADD_RECIPE = gql`
+mutation{
+  addRecipe(name: "Beef Bourgignon"){
+    name
+    author {
+      username
     }
   }
+}
 `;
 
 class MessageCreate extends Component {
