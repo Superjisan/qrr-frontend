@@ -9,6 +9,7 @@ import AccountPage from '../Account';
 import AdminPage from '../Admin';
 import RecipeCreate from '../Recipe/RecipeCreate';
 import RecipeUpdate from '../Recipe/RecipeUpdate';
+import IngredientsView from '../Ingredient/IngredientsView';
 
 import withSession from '../Session/withSession';
 
@@ -52,6 +53,10 @@ const App = ({ session, refetch }) => (
       <Route
         path={routes.UPDATE_RECIPE}
         component={() => <RecipeUpdate />}
+      />
+      <Route 
+        path={routes.VIEW_INGREDIENTS}
+        component={() => <IngredientsView /> }
       />
     </div>
   </Router>

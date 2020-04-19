@@ -122,6 +122,11 @@ const RecipesBase = (props) => {
                       <Typography>
                         Author: {recipe.author.username}
                       </Typography>
+                      <Link to={`/view-ingredients/${recipe.id}`}>
+                        <Button>
+                          View Ingredients
+                        </Button>
+                      </Link>
                     </Paper>
                   </>
                 );
