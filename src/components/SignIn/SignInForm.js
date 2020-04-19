@@ -40,6 +40,7 @@ class SignInForm extends Component {
   };
 
   onSubmit = (event, signIn) => {
+    localStorage.removeItem('token')
     signIn().then(async ({ data }) => {
       this.setState({ ...INITIAL_STATE });
 

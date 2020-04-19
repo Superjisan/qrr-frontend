@@ -7,9 +7,14 @@ import SignUpPage from '../SignUp';
 import SignInPage from '../SignIn';
 import AccountPage from '../Account';
 import AdminPage from '../Admin';
+
 import RecipeCreate from '../Recipe/RecipeCreate';
 import RecipeUpdate from '../Recipe/RecipeUpdate';
+
 import IngredientsView from '../Ingredient/IngredientsView';
+import IngredientsEdit from '../Ingredient/IngredientsEdit';
+
+import InstructionsView from '../Instruction/InstructionsView';
 
 import withSession from '../Session/withSession';
 
@@ -57,6 +62,14 @@ const App = ({ session, refetch }) => (
       <Route 
         path={routes.VIEW_INGREDIENTS}
         component={() => <IngredientsView /> }
+      />
+      <Route 
+        path={routes.VIEW_INSTRUCTIONS}
+        component={() => <InstructionsView /> }
+      />
+      <Route 
+        path={routes.EDIT_INGREDIENTS}
+        component={() => <IngredientsEdit session={session} />}
       />
     </div>
   </Router>

@@ -15,6 +15,7 @@ import withSession from '../../Session/withSession';
 const GET_RECIPE_INGREDIENTS = gql`
   query($recipeId: ID!) {
     recipe(id: $recipeId) {
+      name
       ingredients {
         id
         qty
@@ -41,7 +42,6 @@ const useStyles = (theme) => ({
     paddingRight: theme.spacing(2),
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
-    width: '100%',
   },
 });
 
@@ -51,7 +51,7 @@ const Ingredients = (props) => {
     <div>
       {data.recipe.ingredients.map((ingredient) => {
         return (
-          <Paper key={`ingredient-${ingredient.id}`} className={classes.paperRoot}>
+          <Paper variant="outlined" key={`ingredient-${ingredient.id}`} className={classes.paperRoot}>
             <Typography>
               Item: {get(ingredient, 'item.name')}
             </Typography>
@@ -60,7 +60,7 @@ const Ingredients = (props) => {
             </Typography>
             {get(ingredient, 'uom') && (
               <Typography>
-                Unit Of measure: {get(ingredient, 'uom.name')} -{' '}
+                Unit Of Measure: {get(ingredient, 'uom.name')} -{' '}
                 {get(ingredient, 'uom.alias')}
               </Typography>
             )}
@@ -86,7 +86,7 @@ const IngredientsView = (props) => {
         {({ data, loading, error }) => {
           return (
             <>
-                 <Typography variant="h2">{get(data, "recipe.name")} Ingredients</Typography>
+                 <Typography variant="h3">{get(data, "recipe.name")} Ingredients</Typography>
               {get(data, 'recipe.ingredients') && !loading ? (
                 <Ingredients
                   data={data}

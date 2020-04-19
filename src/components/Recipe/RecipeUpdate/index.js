@@ -84,6 +84,7 @@ const useStyles = (theme) => ({
   editButton: {
     width: `49%`,
     marginBottom: 10,
+    marginTop: 10
   },
   textField: {
     marginBottom: 10,
@@ -139,7 +140,7 @@ const RecipeUpdateForm = (props) => {
         props.history.push(routes.LANDING);
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   };
 
@@ -225,25 +226,6 @@ const RecipeUpdateForm = (props) => {
                   className={classes.textField}
                 />
                 {error && <ErrorMessage error={error} />}
-                <Link to={`ingredients-edit/${id}`}>
-                  <Button
-                    color="secondary"
-                    variant="contained"
-                    className={classes.editButton}
-                    style={{ marginRight: 10 }}
-                  >
-                    Edit Ingredients
-                  </Button>
-                </Link>
-                <Link to={`instructions-edit/${id}`}>
-                  <Button
-                    color="secondary"
-                    variant="contained"
-                    className={classes.editButton}
-                  >
-                    Edit Instruction
-                  </Button>
-                </Link>
 
                 <Button
                   disabled={isInvalid || loading}
@@ -259,21 +241,40 @@ const RecipeUpdateForm = (props) => {
           );
         }}
       </Mutation>
-      <Mutation mutation={DELETE_RECIPE} variables={{id}}>
+      <Mutation mutation={DELETE_RECIPE} variables={{ id }}>
         {(deleteRecipe, deleteRecipeMutationProps) => {
           return (
-          <Button
-            variant="contained"
-            color="error"
-            className={classes.button}
-            onClick={event => onDelete(event, deleteRecipe)}
-            style={{marginTop: 10}}
-          >
-            Delete Recipe
-          </Button>
-          )
+            <Button
+              variant="contained"
+              bgcolor="error"
+              className={classes.button}
+              onClick={(event) => onDelete(event, deleteRecipe)}
+              style={{ marginTop: 10 }}
+            >
+              Delete Recipe
+            </Button>
+          );
         }}
       </Mutation>
+      <Link to={`/edit-ingredients/${id}`}>
+        <Button
+          color="secondary"
+          variant="contained"
+          className={classes.editButton}
+          style={{ marginRight: 10 }}
+        >
+          Edit Ingredients
+        </Button>
+      </Link>
+      <Link to={`/instructions-edit/${id}`}>
+        <Button
+          color="secondary"
+          variant="contained"
+          className={classes.editButton}
+        >
+          Edit Instruction
+        </Button>
+      </Link>
     </Container>
   );
 };
@@ -288,10 +289,11 @@ const RecipeUpdate = (props) => {
         {(queryProps) => {
           return get(queryProps, 'data.recipe') &&
             !get(queryProps, 'loading') ? (
-            <RecipeUpdateForm 
-            {...queryProps} 
-            classes={classes}
-            history={history} />
+            <RecipeUpdateForm
+              {...queryProps}
+              classes={classes}
+              history={history}
+            />
           ) : (
             <div>Loading...</div>
           );
@@ -302,5 +304,5 @@ const RecipeUpdate = (props) => {
 };
 
 export default withStyles(useStyles, { withTheme: true })(
-  withRouter(withSession(RecipeUpdate))
+  withRouter(withSession(RecipeUpdate)),
 );
