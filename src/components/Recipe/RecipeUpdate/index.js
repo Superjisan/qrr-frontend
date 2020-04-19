@@ -2,7 +2,7 @@ import { get } from 'lodash';
 import gql from 'graphql-tag';
 import React, { Component, useState } from 'react';
 import { Mutation, Query } from 'react-apollo';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, withRouter } from 'react-router-dom';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
@@ -66,6 +66,11 @@ const GET_RECIPE = gql`
   }
 `;
 
+const DELETE_RECIPE = gql`
+  mutation($id: ID!) {
+    deleteRecipe(id: $id)
+  }
+`;
 const useStyles = (theme) => ({
   root: {
     '& .MuiTextField-root': {
@@ -74,16 +79,16 @@ const useStyles = (theme) => ({
     },
   },
   button: {
-    width: `100%`
+    width: `100%`,
   },
   editButton: {
     width: `49%`,
     marginBottom: 10,
   },
-  textField : {
+  textField: {
     marginBottom: 10,
-    width: `100%`
-  }
+    width: `100%`,
+  },
 });
 
 const RecipeUpdateForm = (props) => {
@@ -103,7 +108,8 @@ const RecipeUpdateForm = (props) => {
 
   const onIdChange = (event) => setId(event.target.value);
   const onNameChange = (event) => setName(event.target.value);
-  const onRatingChange = (event) => setRating(Number(event.target.value));
+  const onRatingChange = (event) =>
+    setRating(Number(event.target.value));
   const onOriginUrlChange = (event) =>
     setOriginUrl(event.target.value);
   const onOriginTextChange = (event) =>
@@ -117,32 +123,44 @@ const RecipeUpdateForm = (props) => {
       const recipe = await updateRecipe();
       if (recipe) {
         console.log('update worked');
-        return recipe
+        return recipe;
       }
     } catch (error) {
       console.error(error);
     }
-    
+  };
+
+  const onDelete = async (event, deleteRecipe) => {
+    event.preventDefault();
+    try {
+      const deleted = await deleteRecipe();
+      if (deleted) {
+        console.log('delete worked');
+        props.history.push(routes.LANDING);
+      }
+    } catch (error) {
+      console.error(error)
+    }
   };
 
   const isInvalid = name === '';
 
   return (
-    <Mutation
-      mutation={UPDATE_RECIPE}
-      variables={{
-        id,
-        name,
-        rating,
-        originUrl,
-        originText,
-        cookingTime,
-      }}
-    >
-      {(updateRecipe, mutationProps) => {
-        return (
-          <>
-            <Container maxWidth="sm">
+    <Container maxWidth="sm">
+      <Mutation
+        mutation={UPDATE_RECIPE}
+        variables={{
+          id,
+          name,
+          rating,
+          originUrl,
+          originText,
+          cookingTime,
+        }}
+      >
+        {(updateRecipe, mutationProps) => {
+          return (
+            <>
               <form
                 onSubmit={(event) => onSubmit(event, updateRecipe)}
               >
@@ -172,7 +190,7 @@ const RecipeUpdateForm = (props) => {
                   inputProps={{
                     step: 1,
                     min: 1,
-                    max: 5
+                    max: 5,
                   }}
                 />
                 {/* TODO: figure out nulling */}
@@ -208,26 +226,27 @@ const RecipeUpdateForm = (props) => {
                 />
                 {error && <ErrorMessage error={error} />}
                 <Link to={`ingredients-edit/${id}`}>
-                  <Button 
-                    color="secondary" 
+                  <Button
+                    color="secondary"
                     variant="contained"
                     className={classes.editButton}
-                    style={{marginRight: 10}}
+                    style={{ marginRight: 10 }}
                   >
                     Edit Ingredients
                   </Button>
                 </Link>
                 <Link to={`instructions-edit/${id}`}>
-                  <Button 
-                    color="secondary" 
+                  <Button
+                    color="secondary"
                     variant="contained"
                     className={classes.editButton}
                   >
                     Edit Instruction
                   </Button>
                 </Link>
-                <Button 
-                  disabled={isInvalid || loading} 
+
+                <Button
+                  disabled={isInvalid || loading}
                   type="submit"
                   className={classes.button}
                   variant="contained"
@@ -236,17 +255,32 @@ const RecipeUpdateForm = (props) => {
                   Save
                 </Button>
               </form>
-            </Container>
-          </>
-        );
-      }}
-    </Mutation>
+            </>
+          );
+        }}
+      </Mutation>
+      <Mutation mutation={DELETE_RECIPE} variables={{id}}>
+        {(deleteRecipe, deleteRecipeMutationProps) => {
+          return (
+          <Button
+            variant="contained"
+            color="error"
+            className={classes.button}
+            onClick={event => onDelete(event, deleteRecipe)}
+            style={{marginTop: 10}}
+          >
+            Delete Recipe
+          </Button>
+          )
+        }}
+      </Mutation>
+    </Container>
   );
 };
 
 const RecipeUpdate = (props) => {
   let { id } = useParams();
-  const {classes} = props;
+  const { classes, history } = props;
   return (
     <>
       <Link to={routes.LANDING}>Back To Recipes</Link>
@@ -254,7 +288,10 @@ const RecipeUpdate = (props) => {
         {(queryProps) => {
           return get(queryProps, 'data.recipe') &&
             !get(queryProps, 'loading') ? (
-            <RecipeUpdateForm {...queryProps} classes={classes} />
+            <RecipeUpdateForm 
+            {...queryProps} 
+            classes={classes}
+            history={history} />
           ) : (
             <div>Loading...</div>
           );
@@ -265,5 +302,5 @@ const RecipeUpdate = (props) => {
 };
 
 export default withStyles(useStyles, { withTheme: true })(
-  withSession(RecipeUpdate),
+  withRouter(withSession(RecipeUpdate))
 );
