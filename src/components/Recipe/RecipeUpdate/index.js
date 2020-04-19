@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button';
 
 import * as routes from '../../../constants/routes';
 import withSession from '../../Session/withSession';
+import ErrorMessage from '../../Error';
 
 const UPDATE_RECIPE = gql`
   mutation(
@@ -72,10 +73,21 @@ const useStyles = (theme) => ({
       width: '100%',
     },
   },
+  button: {
+    width: `100%`
+  },
+  editButton: {
+    width: `49%`,
+    marginBottom: 10,
+  },
+  textField : {
+    marginBottom: 10,
+    width: `100%`
+  }
 });
 
 const RecipeUpdateForm = (props) => {
-  const { data, loading, error } = props;
+  const { data, loading, error, classes } = props;
   const [id, setId] = useState(get(data, 'recipe.id'));
   const [name, setName] = useState(get(data, 'recipe.name'));
   const [rating, setRating] = useState(get(data, 'recipe.rating'));
@@ -91,11 +103,11 @@ const RecipeUpdateForm = (props) => {
 
   const onIdChange = (event) => setId(event.target.value);
   const onNameChange = (event) => setName(event.target.value);
-  const onRatingChange = (event) => setRating(event.target.value);
+  const onRatingChange = (event) => setRating(Number(event.target.value));
   const onOriginUrlChange = (event) =>
     setOriginUrl(event.target.value);
   const onOriginTextChange = (event) =>
-    setOriginUrl(event.target.value);
+    setOriginText(event.target.value);
   const onCookingTimeChange = (event) =>
     setCookingTime(event.target.value);
 
@@ -130,22 +142,97 @@ const RecipeUpdateForm = (props) => {
       {(updateRecipe, mutationProps) => {
         return (
           <>
-            <CssBaseline />
             <Container maxWidth="sm">
               <form
                 onSubmit={(event) => onSubmit(event, updateRecipe)}
               >
                 <TextField
                   required
-                  id="login-filled-required"
+                  id="name-filled-required"
                   label="Recipe Name"
                   variant="outlined"
                   value={name}
                   onChange={onNameChange}
                   placeholder="Recipe Name"
                   name="name"
+                  className={classes.textField}
                 />
-                <Button disabled={isInvalid || loading} type="submit">
+                {/* TODO: move to stars */}
+                {/* TODO: figure out bugs here */}
+                <TextField
+                  id="rating-filled-required"
+                  label="Recipe Rating"
+                  variant="outlined"
+                  value={rating}
+                  onChange={onRatingChange}
+                  placeholder="Recipe Rating"
+                  name="rating"
+                  type="number"
+                  className={classes.textField}
+                  inputProps={{
+                    step: 1,
+                    min: 1,
+                    max: 5
+                  }}
+                />
+                {/* TODO: figure out nulling */}
+                <TextField
+                  id="cooking-time-filled"
+                  label="Recipe Cooking Time"
+                  variant="outlined"
+                  value={cookingTime}
+                  onChange={onCookingTimeChange}
+                  placeholder="Recipe Cooking Time"
+                  name="cookingTime"
+                  className={classes.textField}
+                />
+                <TextField
+                  id="origin-url-filled"
+                  label="Recipe URL"
+                  variant="outlined"
+                  value={originUrl}
+                  onChange={onOriginUrlChange}
+                  placeholder="Recipe URL"
+                  name="originUrl"
+                  className={classes.textField}
+                />
+                <TextField
+                  id="origin-text-filled"
+                  label="Recipe Origin"
+                  variant="outlined"
+                  value={originText}
+                  onChange={onOriginTextChange}
+                  placeholder="Recipe URL"
+                  name="originText"
+                  className={classes.textField}
+                />
+                {error && <ErrorMessage error={error} />}
+                <Link to={`ingredients-edit/${id}`}>
+                  <Button 
+                    color="secondary" 
+                    variant="contained"
+                    className={classes.editButton}
+                    style={{marginRight: 10}}
+                  >
+                    Edit Ingredients
+                  </Button>
+                </Link>
+                <Link to={`instructions-edit/${id}`}>
+                  <Button 
+                    color="secondary" 
+                    variant="contained"
+                    className={classes.editButton}
+                  >
+                    Edit Instruction
+                  </Button>
+                </Link>
+                <Button 
+                  disabled={isInvalid || loading} 
+                  type="submit"
+                  className={classes.button}
+                  variant="contained"
+                  color="primary"
+                >
                   Save
                 </Button>
               </form>
@@ -159,6 +246,7 @@ const RecipeUpdateForm = (props) => {
 
 const RecipeUpdate = (props) => {
   let { id } = useParams();
+  const {classes} = props;
   return (
     <>
       <Link to={routes.LANDING}>Back To Recipes</Link>
@@ -166,7 +254,7 @@ const RecipeUpdate = (props) => {
         {(queryProps) => {
           return get(queryProps, 'data.recipe') &&
             !get(queryProps, 'loading') ? (
-            <RecipeUpdateForm {...queryProps} />
+            <RecipeUpdateForm {...queryProps} classes={classes} />
           ) : (
             <div>Loading...</div>
           );
