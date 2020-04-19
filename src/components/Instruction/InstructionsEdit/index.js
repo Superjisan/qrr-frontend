@@ -23,9 +23,10 @@ const GET_RECIPE_INSTRUCTIONS = gql`
       id
       name
       author {
-          id
+        id
       }
       instructions {
+        id
         text
         textIngredients {
           wordIndex
@@ -69,7 +70,7 @@ const useStyles = (theme) => ({
     float: 'right',
     marginRight: 5,
     cursor: 'pointer'
-  },
+  }
 });
 
 const Instructions = (props) => {
@@ -79,68 +80,64 @@ const Instructions = (props) => {
     <div>
       {data.recipe.instructions.map((instruction) => {
         return (
-          <>
-            <Paper
-              variant="outlined"
-              key={`instruction-${instruction.id}`}
-              className={classes.paperRoot}
-            >
-              <Typography>
-                {isAllowedToEdit && (
-                  <Link to={`/update-instruction/${instruction.id}`}>
-                    <Edit className={classes.fontIcon} />
-                  </Link>
-                )}
-              </Typography>
-              <Typography variant="body1">
-                {get(instruction, 'text')}
-              </Typography>
+          <Paper
+            variant="outlined"
+            key={`instruction-${instruction.id}`}
+            className={classes.paperRoot}
+          >
+            <Typography>
+              {isAllowedToEdit && (
+                <Link to={`/update-instruction/${instruction.id}`}>
+                  <Edit className={classes.fontIcon} />
+                </Link>
+              )}
+            </Typography>
+            <Typography variant="body1">
+              {get(instruction, 'text')}
+            </Typography>
 
-              {!isEmpty(get(instruction, 'ingredients')) && (
-                <List>
-                  <Typography variant="subtitle2">
-                    Ingredients
-                  </Typography>
-                  {get(instruction, 'ingredients').map(
-                    (ingredient) => {
-                      return (
-                        <ListItem>
-                          <ListItemText
-                            primary={`Item: ${get(
-                              ingredient,
-                              'item.name'
-                            )}`}
-                            secondary={`Quantity: ${get(
-                              ingredient,
-                              'qty'
-                            )} ${
-                              get(ingredient, 'uom') &&
-                              ` 
+            {!isEmpty(get(instruction, 'ingredients')) && (
+              <List>
+                <Typography variant="subtitle2">
+                  Ingredients
+                </Typography>
+                {get(instruction, 'ingredients').map((ingredient) => {
+                  return (
+                    <ListItem
+                      key={`instruction-${instruction.id}-${ingredient.id}`}
+                    >
+                      <ListItemText
+                        primary={`Item: ${get(
+                          ingredient,
+                          'item.name'
+                        )}`}
+                        secondary={`Quantity: ${get(
+                          ingredient,
+                          'qty'
+                        )} ${
+                          get(ingredient, 'uom') &&
+                          ` 
                                 ${get(ingredient, 'uom.name')} - 
                                 ${get(ingredient, 'uom.alias')}`
-                            }`}
-                          />
-                        </ListItem>
-                      );
-                    }
-                  )}
-                </List>
-              )}
-            </Paper>
-            {isAllowedToEdit && (
-              <Link to={`/add-instruction/${data.recipe.id}`}>
-                <Button
-                  className={classes.linkButton}
-                  variant="contained"
-                  color="secondary"
-                >
-                  Add Instruction
-                </Button>
-              </Link>
+                        }`}
+                      />
+                    </ListItem>
+                  );
+                })}
+              </List>
             )}
-          </>
+          </Paper>
         );
       })}
+      <Link to={`/add-instruction/${data.recipe.id}`}>
+        <Button
+          className={classes.linkButton}
+          variant="contained"
+          color="secondary"
+        >
+          Add Instruction
+        </Button>
+      </Link>
     </div>
   );
 };

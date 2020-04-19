@@ -1,0 +1,321 @@
+import { get, uniqBy, find } from 'lodash';
+import gql from 'graphql-tag';
+import React, { useState } from 'react';
+import { Mutation, Query } from 'react-apollo';
+import { Link, useParams, withRouter } from 'react-router-dom';
+
+import Chip from '@material-ui/core/Chip';
+import { withStyles } from '@material-ui/core';
+import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import Container from '@material-ui/core/Container';
+import Button from '@material-ui/core/Button';
+import Input from '@material-ui/core/Input';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+
+import ErrorMessage from '../../Error';
+import * as routes from '../../../constants/routes';
+
+const UPDATE_INSTRUCTION = gql`
+  mutation(
+    $text: String!
+    $category: String
+    $recipeId: ID!
+    $id: ID!
+    $ingredientIds: [ID]
+    $textTimes: [InputTextTime]
+    $textIngredients: [InputTextIngredient]
+  ) {
+    updateInstruction(
+      id: $id
+      text: $text
+      category: $category
+      recipeId: $recipeId
+      ingredientIds: $ingredientIds
+      textTimes: $textTimes
+      textIngredients: $textIngredients
+    ) {
+      id
+      ingredients {
+        item {
+          name
+        }
+      }
+    }
+  }
+`;
+
+const GET_INSTRUCTION = gql`
+  query($id: ID!) {
+    instruction(id: $id) {
+      text
+      textIngredients {
+        wordIndex
+        ingredientId
+      }
+      textTimes {
+        wordIndex
+        timeValue
+      }
+      ingredients {
+        id
+        category
+
+        qty
+        item {
+          name
+        }
+        uom {
+          name
+          alias
+        }
+      }
+      recipe {
+        id
+        ingredients {
+          id
+          qty
+          item {
+            id
+            name
+          }
+          uom {
+            name
+            alias
+          }
+        }
+      }
+    }
+  }
+`;
+
+const useStyles = (theme) => ({
+  textField: {
+    marginBottom: 10,
+    width: `100%`
+  },
+  backButton: {
+    marginBottom: 10
+  },
+  saveButton: {
+    width: '100%'
+  },
+  chips: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  },
+  chip: {
+    margin: 2
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+    width: '100%'
+  }
+});
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250
+    }
+  }
+};
+
+const InstructionUpdateForm = (props) => {
+  const {
+    classes,
+    history,
+    data,
+    error,
+    loading,
+    instructionId
+  } = props;
+  const recipeId = data.instruction.recipe.id;
+  const [text, setText] = useState(data.instruction.text);
+  const [category, setCategory] = useState(data.instruction.category);
+  const [ingredientIds, setIngredientIds] = useState(
+    data.instruction.ingredients.map((ingredient) => ingredient.id)
+  );
+  console.log({ingredientIds});
+  const onTextChange = (event) => setText(event.target.value);
+  const onCategoryChange = (event) => setCategory(event.target.value);
+
+  const onIngredientIdsChange = (event) => {
+    setIngredientIds(event.target.value);
+  };
+
+  const onSubmit = async (event, updateInstruction, recipeId) => {
+    event.preventDefault();
+    try {
+      const newInsruction = await updateInstruction();
+      if (newInsruction) {
+        console.log("update worked")
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const isInvalid = text === '';
+  return (
+    <>
+      <Link to={`/edit-instructions/${recipeId}`}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          className={classes.backButton}
+        >
+          Back To Edit Instructions
+        </Button>
+      </Link>
+      <Mutation
+        mutation={UPDATE_INSTRUCTION}
+        variables={{
+          id: instructionId,
+          recipeId: Number(recipeId),
+          text,
+          ingredientIds
+        }}
+      >
+        {(updateInstruction, mutationProps) => (
+          <form
+            onSubmit={(event) =>
+              onSubmit(event, updateInstruction, recipeId)
+            }
+          >
+            <TextField
+              required
+              id="text-filled-required"
+              label="Instruction Text"
+              variant="outlined"
+              value={text}
+              onChange={onTextChange}
+              placeholder="Instruction Text"
+              name="text"
+              multiline
+              rows={4}
+              className={classes.textField}
+            />
+
+            <TextField
+              id="category-filled-required"
+              label="Instruction category"
+              variant="outlined"
+              value={category}
+              onChange={onCategoryChange}
+              placeholder="Instruction Category"
+              name="category"
+              className={classes.textField}
+            />
+            {get(data, 'instruction.recipe.ingredients') && (
+              <FormControl
+                variant="outlined"
+                className={classes.formControl}
+              >
+                <InputLabel id="ingredient-multiple-chip-label">
+                  Ingredients
+                </InputLabel>
+                <Select
+                  style={{ width: '100%' }}
+                  variant="outlined"
+                  labelId="ingredient-multiple-chip-label"
+                  id="ingredient-ids-chip"
+                  multiple
+                  value={ingredientIds}
+                  onChange={onIngredientIdsChange}
+                  input={<Input id="ingredient-ids-multiple-chip" />}
+                  renderValue={(selected) => (
+                    <div className={classes.chips}>
+                      {selected.map((value) => {
+                        const ingredientBasedOnId = find(
+                          get(data, 'instruction.recipe.ingredients'),
+                          (ingredient) => ingredient.id === value
+                        );
+                        return (
+                          <Chip
+                            key={value}
+                            label={`${
+                              ingredientBasedOnId.item.name
+                            } - ${ingredientBasedOnId.qty} ${
+                              ingredientBasedOnId.uom &&
+                              `- ${ingredientBasedOnId.uom.name}`
+                            } `}
+                            className={classes.chip}
+                          />
+                        );
+                      })}
+                    </div>
+                  )}
+                  MenuProps={MenuProps}
+                >
+                  {get(data, 'instruction.recipe.ingredients').map(
+                    (ingredient) => (
+                      <MenuItem
+                        key={ingredient.id}
+                        value={ingredient.id}
+                      >
+                        {`${ingredient.item.name} - ${
+                          ingredient.qty
+                        } ${
+                          ingredient.uom && `- ${ingredient.uom.name}`
+                        } `}
+                      </MenuItem>
+                    )
+                  )}
+                </Select>
+              </FormControl>
+            )}
+            {error && <ErrorMessage error={error} />}
+            <Button
+              disabled={isInvalid || loading}
+              type="submit"
+              className={classes.saveButton}
+              variant="contained"
+              color="primary"
+            >
+              Save
+            </Button>
+          </form>
+        )}
+      </Mutation>
+    </>
+  );
+};
+
+const InstructionUpdate = (props) => {
+  let { instructionId } = useParams();
+  const { classes, history } = props;
+
+  return (
+    <Container maxWidth="sm">
+      <Query
+        query={GET_INSTRUCTION}
+        variables={{ id: instructionId }}
+      >
+        {({ data, error, loading }) => {
+          return (!data.loading && get(data, "instruction") ?
+            <InstructionUpdateForm
+              data={data}
+              error={error}
+              loading={loading}
+              instructionId={instructionId}
+              classes={classes}
+              history={history}
+            /> : "loading..."
+          );
+        }}
+      </Query>
+    </Container>
+  );
+};
+
+export default withStyles(useStyles, { withTheme: true })(
+  withRouter(InstructionUpdate)
+);

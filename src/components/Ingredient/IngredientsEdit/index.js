@@ -9,6 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 
 import * as routes from '../../../constants/routes';
 
@@ -108,7 +109,7 @@ const IngredientsEdit = (props) => {
   let { recipeId } = useParams();
   const { classes, session } = props;
   return (
-    <>
+    <Container maxWidth="sm">
       <Link to={routes.LANDING}>
         <Button variant="outlined" color="secondary">
           Back To Recipes
@@ -119,7 +120,7 @@ const IngredientsEdit = (props) => {
         {({ data, loading, error }) => {
           return (
             <>
-              <Typography variant="h3">
+              <Typography variant="h4">
                 {get(data, 'recipe.name')} Ingredients
               </Typography>
               {get(data, 'recipe.ingredients') && !loading ? (
@@ -136,7 +137,7 @@ const IngredientsEdit = (props) => {
           );
         }}
       </Query>
-    </>
+    </Container>
   );
 };
 
