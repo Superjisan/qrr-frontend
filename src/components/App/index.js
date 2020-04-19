@@ -17,6 +17,7 @@ import IngredientCreate from '../Ingredient/IngredientCreate';
 import IngredientUpdate from '../Ingredient/IngredientUpdate';
 
 import InstructionsView from '../Instruction/InstructionsView';
+import InstructionsEdit from '../Instruction/InstructionsEdit';
 
 import withSession from '../Session/withSession';
 
@@ -80,6 +81,10 @@ const App = ({ session, refetch }) => (
       <Route 
         path={routes.VIEW_INSTRUCTIONS}
         component={() => <InstructionsView /> }
+      />
+      <Route 
+        path={routes.EDIT_INSTRUCTIONS}
+        component={() => <InstructionsEdit session={session} />}
       />
       
     </div>

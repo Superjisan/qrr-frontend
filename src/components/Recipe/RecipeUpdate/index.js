@@ -265,13 +265,13 @@ const RecipeUpdateForm = (props) => {
           Edit Ingredients
         </Button>
       </Link>
-      <Link to={`/instructions-edit/${id}`}>
+      <Link to={`/edit-instructions/${id}`}>
         <Button
           color="secondary"
           variant="contained"
           className={classes.editButton}
         >
-          Edit Instruction
+          Edit Instructions
         </Button>
       </Link>
     </Container>

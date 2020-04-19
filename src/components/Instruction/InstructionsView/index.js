@@ -83,7 +83,7 @@ const Instructions = (props) => {
                 </Typography>
                 {get(instruction, 'ingredients').map((ingredient) => {
                   return (
-                    <ListItem>
+                    <ListItem key={`instruction-${instruction.id}-ingredients-${ingredient.id}`}>
                       <ListItemText
                         primary={`Item: ${get(
                           ingredient,
