@@ -44,26 +44,35 @@ class RecipeCreate extends Component {
   render() {
     const { session } = this.props;
     const { name } = this.state;
-    return (<>
-    <Link to={routes.LANDING}>Back To Recipes</Link>
-    {session && session.me ? (
-      <Mutation mutation={ADD_RECIPE} variables={{name}}>
-        {(addRecipe, mutationProps) => {
-          const { data, loading, error } = mutationProps;
-          return (
-            <form
-              onSubmit={(event) => this.onSubmit(event, addRecipe)}
-            >
-              <input name="name" value={name} onChange={this.onChange} />
-              <button type="submit">Send</button>
-              {error && <ErrorMessage error={error} />}
-            </form>
-          );
-        }}
-      </Mutation>
-    ) : (
-      `Not Allowed To Add Recipe, You Must Sign In`
-    )}</>);
+    return (
+      <>
+        <Link to={routes.LANDING}>Back To Recipes</Link>
+        {session && session.me ? (
+          <Mutation mutation={ADD_RECIPE} variables={{ name }}>
+            {(addRecipe, mutationProps) => {
+              const { data, loading, error } = mutationProps;
+              return (
+                <form
+                  onSubmit={(event) =>
+                    this.onSubmit(event, addRecipe)
+                  }
+                >
+                  <input
+                    name="name"
+                    value={name}
+                    onChange={this.onChange}
+                  />
+                  <button type="submit">Send</button>
+                  {error && <ErrorMessage error={error} />}
+                </form>
+              );
+            }}
+          </Mutation>
+        ) : (
+          `Not Allowed To Add Recipe, You Must Sign In`
+        )}
+      </>
+    );
   }
 }
 

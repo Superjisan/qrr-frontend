@@ -108,7 +108,7 @@ const RecipesBase = (props) => {
                         {session &&
                           session.me &&
                           recipe.author.id === session.me.id && (
-                            <Link to={routes.UPDATE_RECIPE}>
+                            <Link to={`update-recipe/${recipe.id}`}>
                               <Edit />
                             </Link>
                           )}

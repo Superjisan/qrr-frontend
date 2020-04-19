@@ -48,6 +48,8 @@ class SignInForm extends Component {
       await this.props.refetch();
 
       this.props.history.push(routes.LANDING);
+    }).catch(err => {
+      throw new Error(err)
     });
 
     event.preventDefault();

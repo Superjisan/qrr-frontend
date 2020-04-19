@@ -8,6 +8,7 @@ import SignInPage from '../SignIn';
 import AccountPage from '../Account';
 import AdminPage from '../Admin';
 import RecipeCreate from '../Recipe/RecipeCreate';
+import RecipeUpdate from '../Recipe/RecipeUpdate';
 
 import withSession from '../Session/withSession';
 
@@ -47,6 +48,10 @@ const App = ({ session, refetch }) => (
         exact
         path={routes.ADD_RECIPE}
         component={() => <RecipeCreate />}
+      />
+      <Route
+        path={routes.UPDATE_RECIPE}
+        component={() => <RecipeUpdate />}
       />
     </div>
   </Router>
