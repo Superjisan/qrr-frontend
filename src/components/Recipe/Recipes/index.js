@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import { Edit } from '@material-ui/icons';
 
 import * as routes from '../../../constants/routes';
 
@@ -17,6 +18,7 @@ const GET_ALL_RECIPES = gql`
       name
       author {
         username
+        id
       }
       ingredients {
         qty
@@ -73,11 +75,12 @@ const materialStyles = (theme) => ({
 
 const RecipesBase = (props) => {
   const { classes, session } = props;
+
   return (
     <Query query={GET_ALL_RECIPES}>
       {(queryProps) => {
         const { data } = queryProps;
-        console.log({ data });
+
         return (
           <div>
             {session && session.me && (
@@ -102,13 +105,19 @@ const RecipesBase = (props) => {
                     >
                       <Typography variant="h5">
                         {recipe.name}
+                        {session &&
+                          session.me &&
+                          recipe.author.id === session.me.id && (
+                            <Link to={routes.UPDATE_RECIPE}>
+                              <Edit />
+                            </Link>
+                          )}
                       </Typography>
                       <Typography>
                         # of Ingredients: {recipe.ingredients.length}
                       </Typography>
                       <Typography>
-                        # of Instructions:{' '}
-                        {recipe.instructions.length}
+                        {`# of Instructions: ${recipe.instructions.length}`}
                       </Typography>
                       <Typography>
                         Author: {recipe.author.username}
