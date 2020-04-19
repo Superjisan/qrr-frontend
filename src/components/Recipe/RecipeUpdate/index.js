@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { Mutation, Query } from 'react-apollo';
 import { Link, useParams, withRouter } from 'react-router-dom';
 
-import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
@@ -75,11 +74,11 @@ const useStyles = (theme) => ({
   root: {
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
-      width: '100%',
-    },
+      width: '100%'
+    }
   },
   button: {
-    width: `100%`,
+    width: `100%`
   },
   editButton: {
     width: `49%`,
@@ -88,8 +87,8 @@ const useStyles = (theme) => ({
   },
   textField: {
     marginBottom: 10,
-    width: `100%`,
-  },
+    width: `100%`
+  }
 });
 
 const RecipeUpdateForm = (props) => {
@@ -98,13 +97,13 @@ const RecipeUpdateForm = (props) => {
   const [name, setName] = useState(get(data, 'recipe.name'));
   const [rating, setRating] = useState(get(data, 'recipe.rating'));
   const [originUrl, setOriginUrl] = useState(
-    get(data, 'recipe.originUrl'),
+    get(data, 'recipe.originUrl')
   );
   const [originText, setOriginText] = useState(
-    get(data, 'recipe.originText'),
+    get(data, 'recipe.originText')
   );
   const [cookingTime, setCookingTime] = useState(
-    get(data, 'recipe.cookingTime'),
+    get(data, 'recipe.cookingTime')
   );
 
   const onIdChange = (event) => setId(event.target.value);
@@ -156,7 +155,7 @@ const RecipeUpdateForm = (props) => {
           rating,
           originUrl,
           originText,
-          cookingTime,
+          cookingTime
         }}
       >
         {(updateRecipe, mutationProps) => {
@@ -191,7 +190,7 @@ const RecipeUpdateForm = (props) => {
                   inputProps={{
                     step: 1,
                     min: 1,
-                    max: 5,
+                    max: 5
                   }}
                 />
                 {/* TODO: figure out nulling */}
@@ -304,5 +303,5 @@ const RecipeUpdate = (props) => {
 };
 
 export default withStyles(useStyles, { withTheme: true })(
-  withRouter(withSession(RecipeUpdate)),
+  withRouter(withSession(RecipeUpdate))
 );

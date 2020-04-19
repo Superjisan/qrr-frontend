@@ -1,7 +1,7 @@
 import { get } from 'lodash';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
-import React, { Component } from 'react';
+import React from 'react';
 import { Link, useParams, withRouter } from 'react-router-dom';
 
 import { Edit } from '@material-ui/icons';
@@ -11,11 +11,11 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
 import * as routes from '../../../constants/routes';
-import withSession from '../../Session/withSession';
 
 const GET_RECIPE_INGREDIENTS = gql`
   query($recipeId: ID!) {
     recipe(id: $recipeId) {
+      id
       author {
         id
       }
@@ -37,7 +37,7 @@ const GET_RECIPE_INGREDIENTS = gql`
 
 const useStyles = (theme) => ({
   linkButton: {
-    width: '`100%',
+    width: '`100%'
   },
   paperRoot: {
     paddingTop: theme.spacing(2),
@@ -45,16 +45,16 @@ const useStyles = (theme) => ({
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
     marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(2)
   },
   fontIcon: {
     float: 'right',
     marginRight: 5,
-    cursor: 'pointer',
+    cursor: 'pointer'
   },
   addButton: {
-    width: '100%',
-  },
+    width: '100%'
+  }
 });
 
 const Ingredients = (props) => {
@@ -105,7 +105,6 @@ const Ingredients = (props) => {
 };
 
 const IngredientsEdit = (props) => {
-  console.log('coming here');
   let { recipeId } = useParams();
   const { classes, session } = props;
   return (
@@ -142,5 +141,5 @@ const IngredientsEdit = (props) => {
 };
 
 export default withStyles(useStyles, { withTheme: true })(
-  withRouter(IngredientsEdit),
+  withRouter(IngredientsEdit)
 );

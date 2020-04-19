@@ -13,6 +13,7 @@ import RecipeUpdate from '../Recipe/RecipeUpdate';
 
 import IngredientsView from '../Ingredient/IngredientsView';
 import IngredientsEdit from '../Ingredient/IngredientsEdit';
+import IngredientCreate from '../Ingredient/IngredientCreate';
 
 import InstructionsView from '../Instruction/InstructionsView';
 
@@ -64,13 +65,18 @@ const App = ({ session, refetch }) => (
         component={() => <IngredientsView /> }
       />
       <Route 
-        path={routes.VIEW_INSTRUCTIONS}
-        component={() => <InstructionsView /> }
-      />
-      <Route 
         path={routes.EDIT_INGREDIENTS}
         component={() => <IngredientsEdit session={session} />}
       />
+      <Route 
+        path={routes.ADD_INGREDIENT}
+        component={() => <IngredientCreate />}
+      />
+      <Route 
+        path={routes.VIEW_INSTRUCTIONS}
+        component={() => <InstructionsView /> }
+      />
+      
     </div>
   </Router>
 );
