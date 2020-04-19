@@ -72,7 +72,7 @@ const Ingredients = (props) => {
             <Typography>
               Item: {get(ingredient, 'item.name')}
               {isAllowedToEdit && (
-                <Link to={`update-ingredient/${ingredient.id}`}>
+                <Link to={`/update-ingredient/${ingredient.id}`}>
                   <Edit className={classes.fontIcon} />
                 </Link>
               )}

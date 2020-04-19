@@ -14,6 +14,7 @@ import RecipeUpdate from '../Recipe/RecipeUpdate';
 import IngredientsView from '../Ingredient/IngredientsView';
 import IngredientsEdit from '../Ingredient/IngredientsEdit';
 import IngredientCreate from '../Ingredient/IngredientCreate';
+import IngredientUpdate from '../Ingredient/IngredientUpdate';
 
 import InstructionsView from '../Instruction/InstructionsView';
 
@@ -71,6 +72,10 @@ const App = ({ session, refetch }) => (
       <Route 
         path={routes.ADD_INGREDIENT}
         component={() => <IngredientCreate />}
+      />
+      <Route 
+        path={routes.UPDATE_INGREDIENT}
+        component={() => <IngredientUpdate />}
       />
       <Route 
         path={routes.VIEW_INSTRUCTIONS}

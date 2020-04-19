@@ -15,4 +15,4 @@ export const UPDATE_INSTRUCTION="/update-instruction/:instructionId";
 export const VIEW_INGREDIENTS="/view-ingredients/:recipeId";
 export const ADD_INGREDIENT="/add-ingredient/:recipeId"
 export const EDIT_INGREDIENTS="/edit-ingredients/:recipeId";
-export const UPDATE_INGREDIENT="/update-ingredient/:instructionId"
+export const UPDATE_INGREDIENT="/update-ingredient/:ingredientId"
