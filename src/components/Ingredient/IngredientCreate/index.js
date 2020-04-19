@@ -15,11 +15,10 @@ import * as routes from '../../../constants/routes';
 
 const ADD_INGREDIENT_TO_RECIPE = gql`
   mutation(
-    $recipeId: ID!
+    $recipeId: Int!
     $qty: Float!
     $itemName: String
     $itemId: Int
-    $recipeId: Int!
     $uomId: Int
   ) {
     addIngredient(
@@ -27,6 +26,7 @@ const ADD_INGREDIENT_TO_RECIPE = gql`
       qty: $qty
       itemName: $itemName
       itemId: $itemId
+      uomId: $uomId
     ) {
       id
       item {
@@ -54,16 +54,22 @@ const useStyles = (theme) => ({
   textField: {
     marginBottom: 10,
     width: `100%`
+  },
+  backButton: {
+    marginBottom: 10
+  },
+  saveButton : {
+      width: '100%'
   }
 });
 
 const IngredientCreate = (props) => {
   let { recipeId } = useParams();
   const { classes, history } = props;
-  const [qty, setQty] = useState();
+  const [qty, setQty] = useState(1);
   const [itemName, setItemName] = useState('');
-  const [itemId, setItemId] = useState('');
-  const [uomId, setUomId] = useState('');
+  const [itemId, setItemId] = useState();
+  const [uomId, setUomId] = useState();
 
   const onQtyChange = (event) => {
     setQty(Number(event.target.value));
@@ -72,23 +78,38 @@ const IngredientCreate = (props) => {
     setItemName(event.target.value);
   };
   const onItemIdChange = (event) => {
-    console.log({ value: event.target.value });
+    if(event.target.value) {
+        setItemName("")
+    }
     setItemId(Number(event.target.value));
   };
   const onUomIdChange = (event) => {
     setUomId(Number(event.target.value));
   };
 
-  const onSubmit = (event, addIngredient) => {
+  const onSubmit = async (event, addIngredient, recipeId) => {
     event.preventDefault();
+    try {
+        const newIngredient = await addIngredient()
+        if(newIngredient){
+            history.push(`/edit-ingredients/${recipeId}`)
+        }
+    } catch(err) {
+        console.error(err)
+    }
   };
 
   const isItemNameDisabled = !!itemId;
+  const isInvalid = qty === '';
 
   return (
     <Container maxWidth="sm">
       <Link to={`/edit-ingredients/${recipeId}`}>
-        <Button variant="outlined" color="secondary">
+        <Button
+          variant="outlined"
+          color="secondary"
+          className={classes.backButton}
+        >
           Back To Edit Ingredients
         </Button>
       </Link>
@@ -98,7 +119,7 @@ const IngredientCreate = (props) => {
             <Mutation
               mutation={ADD_INGREDIENT_TO_RECIPE}
               variables={{
-                recipeId,
+                recipeId: Number(recipeId),
                 qty,
                 itemName,
                 itemId,
@@ -107,9 +128,10 @@ const IngredientCreate = (props) => {
             >
               {(addIngredient, mutationProps) => (
                 <form
-                  onSubmit={(event) => onSubmit(event, addIngredient)}
+                  onSubmit={(event) => onSubmit(event, addIngredient, recipeId)}
                 >
                   <TextField
+                    required
                     id="qty-filled-required"
                     label="Ingredient Quantity"
                     variant="outlined"
@@ -119,6 +141,9 @@ const IngredientCreate = (props) => {
                     name="qty"
                     type="number"
                     className={classes.textField}
+                    inputProps={{
+                        step: "0.01"
+                    }}
                   />
                   <TextField
                     id="itemName-filled-required"
@@ -131,6 +156,7 @@ const IngredientCreate = (props) => {
                     disabled={isItemNameDisabled}
                     className={classes.textField}
                   />
+                  {/* TODO: replace with AutoComplete and Control & Uncontrolled Error */}
                   <TextField
                     id="item-id-filled"
                     select
@@ -142,7 +168,7 @@ const IngredientCreate = (props) => {
                     className={classes.textField}
                     helperText="Select Item For Ingredient"
                   >
-                    <MenuItem value="">
+                    <MenuItem value={undefined}>
                       <em>None</em>
                     </MenuItem>
                     {get(data, 'items', []).map((option) => (
@@ -151,10 +177,32 @@ const IngredientCreate = (props) => {
                       </MenuItem>
                     ))}
                   </TextField>
+                  <TextField
+                    id="uom-id-filled"
+                    select
+                    label="Unit of Measure"
+                    value={uomId}
+                    name="uomId"
+                    variant="outlined"
+                    onChange={onUomIdChange}
+                    className={classes.textField}
+                    helperText="Select Unit of Measure"
+                  >
+                    <MenuItem value={undefined}>
+                      <em>None</em>
+                    </MenuItem>
+                    {get(data, 'uoms', []).map((option) => (
+                      <MenuItem key={option.id} value={option.id}>
+                        {option.name}{' '}
+                        {option.alias && `- ${option.alias}`}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  {error && <ErrorMessage error={error} />}
                   <Button
-                    disabled={loading}
+                    disabled={isInvalid || loading}
                     type="submit"
-                    className={classes.button}
+                    className={classes.saveButton}
                     variant="contained"
                     color="primary"
                   >
