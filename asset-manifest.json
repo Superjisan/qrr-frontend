@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.js": "/qrr-frontend/static/js/main.fa408bc9.chunk.js",
-    "main.js.map": "/qrr-frontend/static/js/main.fa408bc9.chunk.js.map",
+    "main.js": "/qrr-frontend/static/js/main.f76ac9c8.chunk.js",
+    "main.js.map": "/qrr-frontend/static/js/main.f76ac9c8.chunk.js.map",
     "runtime-main.js": "/qrr-frontend/static/js/runtime-main.8887fb40.js",
     "runtime-main.js.map": "/qrr-frontend/static/js/runtime-main.8887fb40.js.map",
     "static/js/2.6a0e0bcb.chunk.js": "/qrr-frontend/static/js/2.6a0e0bcb.chunk.js",
     "static/js/2.6a0e0bcb.chunk.js.map": "/qrr-frontend/static/js/2.6a0e0bcb.chunk.js.map",
     "index.html": "/qrr-frontend/index.html",
-    "precache-manifest.eb9693e9932c0a636eda26ecbc7a2faa.js": "/qrr-frontend/precache-manifest.eb9693e9932c0a636eda26ecbc7a2faa.js",
+    "precache-manifest.f5a168ec85c8e4b2a5c5085566177680.js": "/qrr-frontend/precache-manifest.f5a168ec85c8e4b2a5c5085566177680.js",
     "service-worker.js": "/qrr-frontend/service-worker.js",
     "static/js/2.6a0e0bcb.chunk.js.LICENSE.txt": "/qrr-frontend/static/js/2.6a0e0bcb.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.8887fb40.js",
     "static/js/2.6a0e0bcb.chunk.js",
-    "static/js/main.fa408bc9.chunk.js"
+    "static/js/main.f76ac9c8.chunk.js"
   ]
 }
