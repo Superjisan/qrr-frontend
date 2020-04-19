@@ -16,6 +16,7 @@ const GET_RECIPE_INGREDIENTS = gql`
   query($recipeId: ID!) {
     recipe(id: $recipeId) {
       ingredients {
+        id
         qty
         item {
           name
@@ -31,12 +32,48 @@ const GET_RECIPE_INGREDIENTS = gql`
 
 const useStyles = (theme) => ({
   linkButton: {
-      width: '`100%'
+    width: '`100%',
+  },
+  paperRoot: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    width: '100%',
   },
 });
 
+const Ingredients = (props) => {
+  const { data, error, classes } = props;
+  return (
+    <div>
+      {data.recipe.ingredients.map((ingredient) => {
+        return (
+          <Paper key={`ingredient-${ingredient.id}`} className={classes.paperRoot}>
+            <Typography>
+              Item: {get(ingredient, 'item.name')}
+            </Typography>
+            <Typography>
+              Quantity: {get(ingredient, 'qty')}
+            </Typography>
+            {get(ingredient, 'uom') && (
+              <Typography>
+                Unit Of measure: {get(ingredient, 'uom.name')} -{' '}
+                {get(ingredient, 'uom.alias')}
+              </Typography>
+            )}
+          </Paper>
+        );
+      })}
+    </div>
+  );
+};
+
 const IngredientsView = (props) => {
   let { recipeId } = useParams();
+  const { classes } = props;
   return (
     <>
       <Link to={routes.LANDING}>
@@ -44,13 +81,29 @@ const IngredientsView = (props) => {
           Back To Recipes
         </Button>
       </Link>
-      <Query query={GET_RECIPE_INGREDIENTS} variables={{recipeId}}>
-          {({data, loading, error}) => {
-              return get(data, "recipe.ingredients") && !loading ? "we here" : "loading"
-          }}
+     
+      <Query query={GET_RECIPE_INGREDIENTS} variables={{ recipeId }}>
+        {({ data, loading, error }) => {
+          return (
+            <>
+                 <Typography variant="h2">{get(data, "recipe.name")} Ingredients</Typography>
+              {get(data, 'recipe.ingredients') && !loading ? (
+                <Ingredients
+                  data={data}
+                  error={error}
+                  classes={classes}
+                />
+              ) : (
+                'loading'
+              )}
+            </>
+          );
+        }}
       </Query>
     </>
   );
 };
 
-export default withStyles(useStyles, { withTheme: true })(withRouter(withSession(IngredientsView)))
+export default withStyles(useStyles, { withTheme: true })(
+  withRouter(withSession(IngredientsView)),
+);

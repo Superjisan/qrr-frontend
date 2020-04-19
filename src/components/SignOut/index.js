@@ -8,7 +8,7 @@ import history from '../../constants/history';
 const SignOutButton = () => (
   <ApolloConsumer>
     {(client) => (
-      <Button color="primary.light" onClick={() => signOut(client)}>
+      <Button bgcolor="primary.light" onClick={() => signOut(client)}>
         Sign Out
       </Button>
     )}

@@ -3,11 +3,11 @@ import { Query } from 'react-apollo';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+import { Edit } from '@material-ui/icons';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-import { Edit } from '@material-ui/icons';
 
 import * as routes from '../../../constants/routes';
 
@@ -54,7 +54,6 @@ const materialStyles = (theme) => ({
     paddingRight: theme.spacing(2),
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
-    widht: '100%',
   },
   fontIcon: {
     float: 'right',
@@ -67,6 +66,9 @@ const materialStyles = (theme) => ({
   listItem: {
     paddingTop: 0,
     paddingBottom: 0,
+  },
+  viewButton: {
+    margin: 5
   },
   button: {
     width: '100%',
@@ -98,10 +100,10 @@ const RecipesBase = (props) => {
               data.recipes &&
               data.recipes.map((recipe) => {
                 return (
-                  <>
                     <Paper
                       className={classes.paperRoot}
                       key={recipe.id}
+                      variant="outlined"
                     >
                       <Typography variant="h5">
                         {recipe.name}
@@ -109,7 +111,7 @@ const RecipesBase = (props) => {
                           session.me &&
                           recipe.author.id === session.me.id && (
                             <Link to={`update-recipe/${recipe.id}`}>
-                              <Edit />
+                              <Edit className={classes.fontIcon} />
                             </Link>
                           )}
                       </Typography>
@@ -123,12 +125,16 @@ const RecipesBase = (props) => {
                         Author: {recipe.author.username}
                       </Typography>
                       <Link to={`/view-ingredients/${recipe.id}`}>
-                        <Button>
+                        <Button className={classes.viewButton} variant="outlined" color="secondary">
                           View Ingredients
                         </Button>
                       </Link>
+                      <Link to={`/view-instructions/${recipe.id}`}>
+                        <Button className={classes.viewButton} variant="outlined" color="secondary">
+                          View Instructions
+                        </Button>
+                      </Link>
                     </Paper>
-                  </>
                 );
               })}
           </div>
