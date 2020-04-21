@@ -70,30 +70,37 @@ const DELETE_RECIPE = gql`
     deleteRecipe(id: $id)
   }
 `;
-const useStyles = (theme) => ({
-  root: {
-    '& .MuiTextField-root': {
-      margin: theme.spacing(1),
+const useStyles = (theme) => {
+  return {
+    root: {
+      '& .MuiTextField-root': {
+        margin: theme.spacing(1),
+        width: '100%'
+      }
+    },
+    button: {
+      width: `100%`
+    },
+    editButton: {
+      width: `49%`,
+      marginBottom: 10,
+      marginTop: 10
+    },
+    backButton: {
+      marginBottom: 20,
+      marginTop: 10
+    },
+    textField: {
+      marginBottom: 10,
+      width: `100%`
+    },
+    deleteButton: {
+      backgroundColor: theme.palette.error.main,
+      color: theme.palette.error.contrastText,
       width: '100%'
     }
-  },
-  button: {
-    width: `100%`
-  },
-  editButton: {
-    width: `49%`,
-    marginBottom: 10,
-    marginTop: 10
-  },
-  backButton: {
-    marginBottom: 20,
-    marginTop: 10
-  },
-  textField: {
-    marginBottom: 10,
-    width: `100%`
-  }
-});
+  };
+};
 
 const RecipeUpdateForm = (props) => {
   const { data, loading, error, classes } = props;
@@ -168,13 +175,13 @@ const RecipeUpdateForm = (props) => {
               <Link to={routes.LANDING}>
                 <Button
                   className={classes.backButton}
-                  variant="outlined" 
+                  variant="outlined"
                   color="secondary"
                 >
                   Back To Recipes
                 </Button>
               </Link>
-              
+
               <form
                 onSubmit={(event) => onSubmit(event, updateRecipe)}
               >
@@ -259,8 +266,7 @@ const RecipeUpdateForm = (props) => {
           return (
             <Button
               variant="contained"
-              bgcolor="error"
-              className={classes.button}
+              className={classes.deleteButton}
               onClick={(event) => onDelete(event, deleteRecipe)}
               style={{ marginTop: 10 }}
             >
