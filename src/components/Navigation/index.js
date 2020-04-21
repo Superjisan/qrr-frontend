@@ -50,7 +50,6 @@ const Navigation = ({ session }) => {
 };
 
 const NavigationAuth = ({ session }) => {
-  const classes = useStyles();
   return (
     <>
       {session.me.username}
@@ -60,7 +59,6 @@ const NavigationAuth = ({ session }) => {
 };
 
 const NavigationNonAuth = () => {
-  const classes = useStyles();
   return (
     <Link to={routes.SIGN_IN}>
       <Button bgcolor="contrastText">Sign In</Button>
