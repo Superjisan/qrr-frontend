@@ -115,6 +115,11 @@ const IngredientsEdit = (props) => {
           Back To Recipes
         </Button>
       </Link>
+      <Link to={`/update-recipe/${recipeId}`}>
+        <Button variant="outlined" color="secondary">
+          Back To Recipe Edit
+        </Button>
+      </Link>
 
       <Query query={GET_RECIPE_INGREDIENTS} variables={{ recipeId }}>
         {({ data, loading, error }) => {

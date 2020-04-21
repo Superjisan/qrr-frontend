@@ -67,9 +67,11 @@ const GET_INSTRUCTION = gql`
 
         qty
         item {
+          id
           name
         }
         uom {
+          id
           name
           alias
         }
@@ -84,6 +86,7 @@ const GET_INSTRUCTION = gql`
             name
           }
           uom {
+            id
             name
             alias
           }
