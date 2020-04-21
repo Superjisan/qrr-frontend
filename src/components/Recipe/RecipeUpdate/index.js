@@ -85,6 +85,10 @@ const useStyles = (theme) => ({
     marginBottom: 10,
     marginTop: 10
   },
+  backButton: {
+    marginBottom: 20,
+    marginTop: 10
+  },
   textField: {
     marginBottom: 10,
     width: `100%`
@@ -161,6 +165,16 @@ const RecipeUpdateForm = (props) => {
         {(updateRecipe, mutationProps) => {
           return (
             <>
+              <Link to={routes.LANDING}>
+                <Button
+                  className={classes.backButton}
+                  variant="outlined" 
+                  color="secondary"
+                >
+                  Back To Recipes
+                </Button>
+              </Link>
+              
               <form
                 onSubmit={(event) => onSubmit(event, updateRecipe)}
               >
@@ -282,23 +296,20 @@ const RecipeUpdate = (props) => {
   let { id } = useParams();
   const { classes, history } = props;
   return (
-    <>
-      <Link to={routes.LANDING}>Back To Recipes</Link>
-      <Query query={GET_RECIPE} variables={{ id }}>
-        {(queryProps) => {
-          return get(queryProps, 'data.recipe') &&
-            !get(queryProps, 'loading') ? (
-            <RecipeUpdateForm
-              {...queryProps}
-              classes={classes}
-              history={history}
-            />
-          ) : (
-            <div>Loading...</div>
-          );
-        }}
-      </Query>
-    </>
+    <Query query={GET_RECIPE} variables={{ id }}>
+      {(queryProps) => {
+        return get(queryProps, 'data.recipe') &&
+          !get(queryProps, 'loading') ? (
+          <RecipeUpdateForm
+            {...queryProps}
+            classes={classes}
+            history={history}
+          />
+        ) : (
+          <div>Loading...</div>
+        );
+      }}
+    </Query>
   );
 };
 
