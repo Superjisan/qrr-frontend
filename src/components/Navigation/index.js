@@ -13,37 +13,34 @@ import SignOutButton from '../SignOut';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(2)
   },
   title: {
     flexGrow: 1,
-  },
+    textDecoration: 'none',
+    color: 'white',
+    cursor: 'pointer'
+  }
 }));
 
-const Navigation = ({ session }) => (
-  <div>
-    {session && session.me ? (
-      <NavigationAuth session={session} />
-    ) : (
-      <NavigationNonAuth />
-    )}
-  </div>
-);
-
-const NavigationAuth = ({ session }) => {
+const Navigation = ({ session }) => {
   const classes = useStyles();
   return (
     <div className={classes}>
       <AppBar>
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            QR^2
-          </Typography>
+          <Link to={routes.LANDING} className={classes.title}>
+            <Typography variant="h6">QR^2</Typography>
+          </Link>
           <Typography>
-            <SignOutButton />
+            {session && session.me ? (
+              <NavigationAuth session={session} />
+            ) : (
+              <NavigationNonAuth />
+            )}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -52,24 +49,22 @@ const NavigationAuth = ({ session }) => {
   );
 };
 
+const NavigationAuth = ({ session }) => {
+  const classes = useStyles();
+  return (
+    <>
+      {session.me.username}
+      <SignOutButton />
+    </>
+  );
+};
+
 const NavigationNonAuth = () => {
   const classes = useStyles();
   return (
-    <div className={classes}>
-      <AppBar>
-        <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            QR^2
-          </Typography>
-          <Typography>
-            <Link to={routes.SIGN_IN}>
-              <Button bgcolor="contrastText">Sign In</Button>
-            </Link>
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Toolbar />
-    </div>
+    <Link to={routes.SIGN_IN}>
+      <Button bgcolor="contrastText">Sign In</Button>
+    </Link>
   );
 };
 

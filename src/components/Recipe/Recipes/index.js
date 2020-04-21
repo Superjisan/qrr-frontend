@@ -3,7 +3,7 @@ import { Query } from 'react-apollo';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Edit } from '@material-ui/icons';
+import { Edit, Cached } from '@material-ui/icons';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
@@ -17,23 +17,17 @@ const GET_ALL_RECIPES = gql`
     recipes {
       id
       name
+      cookingTime
+      rating
       author {
-        username
         id
+        username
       }
       ingredients {
-        qty
-        item {
-          name
-        }
+        id
       }
       instructions {
-        text
-        ingredients {
-          item {
-            name
-          }
-        }
+        id
       }
     }
   }
@@ -82,13 +76,19 @@ const RecipesBase = (props) => {
 
   return (
     <Query query={GET_ALL_RECIPES}>
-      {(queryProps) => {
-        const { data } = queryProps;
-
+      {({ data, loading, error, refetch }) => {
         return (
           <Container maxWidth="sm">
             <Typography variant="h3" align="center">
               Recipes
+              <Button
+                onClick={() => refetch()}
+                color="secondary"
+                variant="outlined"
+                className={classes.fontIcon}
+              >
+                <Cached />
+              </Button>
             </Typography>
             {session && session.me && (
               <Link to={routes.ADD_RECIPE}>
