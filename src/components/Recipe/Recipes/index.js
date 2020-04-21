@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Edit } from '@material-ui/icons';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -42,10 +43,10 @@ const materialStyles = (theme) => ({
   list: {
     width: '100%',
     backgroundColor: theme.palette.background.paper,
-    paddingTop: 0,
+    paddingTop: 0
   },
   inline: {
-    display: 'inline',
+    display: 'inline'
   },
   paperRoot: {
     paddingTop: theme.spacing(2),
@@ -53,26 +54,27 @@ const materialStyles = (theme) => ({
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
     marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(2)
   },
   fontIcon: {
     float: 'right',
     marginRight: 5,
-    cursor: 'pointer',
+    cursor: 'pointer'
   },
   paragraph: {
-    marginTop: 10,
+    marginTop: 10
   },
   listItem: {
     paddingTop: 0,
-    paddingBottom: 0,
+    paddingBottom: 0
   },
   viewButton: {
     margin: 5
   },
   button: {
     width: '100%',
-  },
+    marginTop: 10
+  }
 });
 
 const RecipesBase = (props) => {
@@ -84,7 +86,10 @@ const RecipesBase = (props) => {
         const { data } = queryProps;
 
         return (
-          <div>
+          <Container maxWidth="sm">
+            <Typography variant="h3" align="center">
+              Recipes
+            </Typography>
             {session && session.me && (
               <Link to={routes.ADD_RECIPE}>
                 <Button
@@ -100,44 +105,52 @@ const RecipesBase = (props) => {
               data.recipes &&
               data.recipes.map((recipe) => {
                 return (
-                    <Paper
-                      className={classes.paperRoot}
-                      key={recipe.id}
-                      variant="outlined"
-                    >
-                      <Typography variant="h5">
-                        {recipe.name}
-                        {session &&
-                          session.me &&
-                          recipe.author.id === session.me.id && (
-                            <Link to={`update-recipe/${recipe.id}`}>
-                              <Edit className={classes.fontIcon} />
-                            </Link>
-                          )}
-                      </Typography>
-                      <Typography>
-                        # of Ingredients: {recipe.ingredients.length}
-                      </Typography>
-                      <Typography>
-                        {`# of Instructions: ${recipe.instructions.length}`}
-                      </Typography>
-                      <Typography>
-                        Author: {recipe.author.username}
-                      </Typography>
-                      <Link to={`/view-ingredients/${recipe.id}`}>
-                        <Button className={classes.viewButton} variant="outlined" color="secondary">
-                          View Ingredients
-                        </Button>
-                      </Link>
-                      <Link to={`/view-instructions/${recipe.id}`}>
-                        <Button className={classes.viewButton} variant="outlined" color="secondary">
-                          View Instructions
-                        </Button>
-                      </Link>
-                    </Paper>
+                  <Paper
+                    className={classes.paperRoot}
+                    key={recipe.id}
+                    variant="outlined"
+                  >
+                    <Typography variant="h5">
+                      {recipe.name}
+                      {session &&
+                        session.me &&
+                        recipe.author.id === session.me.id && (
+                          <Link to={`update-recipe/${recipe.id}`}>
+                            <Edit className={classes.fontIcon} />
+                          </Link>
+                        )}
+                    </Typography>
+                    <Typography>
+                      # of Ingredients: {recipe.ingredients.length}
+                    </Typography>
+                    <Typography>
+                      {`# of Instructions: ${recipe.instructions.length}`}
+                    </Typography>
+                    <Typography>
+                      Author: {recipe.author.username}
+                    </Typography>
+                    <Link to={`/view-ingredients/${recipe.id}`}>
+                      <Button
+                        className={classes.viewButton}
+                        variant="outlined"
+                        color="secondary"
+                      >
+                        View Ingredients
+                      </Button>
+                    </Link>
+                    <Link to={`/view-instructions/${recipe.id}`}>
+                      <Button
+                        className={classes.viewButton}
+                        variant="outlined"
+                        color="secondary"
+                      >
+                        View Instructions
+                      </Button>
+                    </Link>
+                  </Paper>
                 );
               })}
-          </div>
+          </Container>
         );
       }}
     </Query>
