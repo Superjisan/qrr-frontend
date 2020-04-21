@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
-import { withStyles } from '@material-ui/core/styles';
+
+import { withStyles, Typography } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-
 
 import * as routes from '../../constants/routes';
 import ErrorMessage from '../Error';
@@ -18,80 +18,92 @@ const SIGN_IN = gql`
 `;
 
 const useStyles = (theme) => ({
-  root: {
-    '& .MuiTextField-root': {
-      margin: theme.spacing(1),
-      width: '100%',
-    },
+  textField: {
+    marginBottom: 10,
+    width: `100%`
   },
+  saveButton: {
+    width: '100%'
+  }
 });
 
-const INITIAL_STATE = {
-  login: '',
-  password: '',
-};
+const SignInForm = (props) => {
+  const [login, setLogin] = useState('');
+  const [password, setPassword] = useState('');
 
-class SignInForm extends Component {
-  state = { ...INITIAL_STATE };
-
-  onChange = (event) => {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
+  const onLoginChange = (event) => {
+    const { value } = event.target;
+    setLogin(value);
   };
 
-  onSubmit = (event, signIn) => {
-    localStorage.removeItem('token')
-    signIn().then(async ({ data }) => {
-      this.setState({ ...INITIAL_STATE });
+  const onPasswordChange = (event) => {
+    const { value } = event.target;
+    setPassword(value);
+  };
 
-      localStorage.setItem('token', data.signIn.token);
+  const onSubmit = (event, signIn) => {
+    localStorage.removeItem('token');
+    signIn()
+      .then(async ({ data }) => {
+        localStorage.setItem('token', data.signIn.token);
 
-      await this.props.refetch();
+        await props.refetch();
 
-      this.props.history.push(routes.LANDING);
-    }).catch(err => {
-      throw new Error(err)
-    });
+        props.history.push(routes.LANDING);
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
 
     event.preventDefault();
   };
 
-  render() {
-    const { login, password } = this.state;
-    const { classes } = this.props;
+  const { classes } = props;
 
-    const isInvalid = password === '' || login === '';
+  const isInvalid = password === '' || login === '';
 
-    return (
+  return (
+    <>
+      <Typography className={classes.textField} variant="h3" align="center">
+        Sign In
+      </Typography>
       <Mutation mutation={SIGN_IN} variables={{ login, password }}>
         {(signIn, { data, loading, error }) => (
           <form
             className={classes.root}
-            onSubmit={(event) => this.onSubmit(event, signIn)}
+            onSubmit={(event) => onSubmit(event, signIn)}
           >
             <div>
               <TextField
+                className={classes.textField}
                 required
                 id="login-filled-required"
                 label="Email Or Username"
                 variant="outlined"
                 value={login}
-                onChange={this.onChange}
+                onChange={onLoginChange}
                 placeholder="Email or Username"
                 name="login"
               />
               <TextField
+                className={classes.textField}
                 variant="outlined"
                 required
                 id="pw-filled-required"
                 name="password"
                 value={password}
-                onChange={this.onChange}
+                onChange={onPasswordChange}
                 type="password"
                 placeholder="Password"
               />
             </div>
-            <Button disabled={isInvalid || loading} type="submit">
+            <Button
+              className={classes.saveButton}
+              disabled={isInvalid || loading}
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
               Sign In
             </Button>
 
@@ -99,8 +111,8 @@ class SignInForm extends Component {
           </form>
         )}
       </Mutation>
-    );
-  }
-}
+    </>
+  );
+};
 
 export default withStyles(useStyles, { withTheme: true })(SignInForm);

@@ -3,7 +3,11 @@ import { Link, withRouter } from 'react-router-dom';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import { withStyles, Typography } from '@material-ui/core';
+import {
+  withStyles,
+  Typography,
+  makeStyles
+} from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
@@ -19,6 +23,12 @@ const SIGN_UP = gql`
   }
 `;
 
+const useSignUpLinkStyles = makeStyles((theme) => ({
+  signupLink: {
+    marginTop: 10
+  }
+}));
+
 const useStyles = (theme) => ({
   root: {
     '& .MuiTextField-root': {
@@ -30,6 +40,9 @@ const useStyles = (theme) => ({
     marginTop: 10,
     marginBottom: 10,
     width: `100%`
+  },
+  saveButton: {
+    width: '100%'
   }
 });
 
@@ -152,6 +165,8 @@ const SignUpForm = (props) => {
             variant="contained"
             disabled={isInvalid || loading}
             type="submit"
+            color="primary"
+            className={classes.saveButton}
           >
             Sign Up
           </Button>
@@ -163,11 +178,18 @@ const SignUpForm = (props) => {
   );
 };
 
-const SignUpLink = () => (
-  <p>
-    Don't have an account? <Link to={routes.SIGN_UP}>Sign Up</Link>
-  </p>
-);
+const SignUpLink = () => {
+  const classes = useSignUpLinkStyles();
+  return (
+    <Typography
+      align="center"
+      variant="subtitle1"
+      className={classes.signupLink}
+    >
+      Don't have an account? <Link to={routes.SIGN_UP}>Sign Up</Link>
+    </Typography>
+  );
+};
 
 export default withStyles(useStyles, { withTheme: true })(
   withRouter(SignUpPage)
