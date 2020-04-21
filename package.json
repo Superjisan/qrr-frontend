@@ -2,7 +2,7 @@
   "name": "fullstack-apollo-react-boilerplate-project",
   "version": "0.1.0",
   "author": "Robin Wieruch <hello@rwieruch.com> (https://www.robinwieruch.de)",
-  "homepage": "https://www.superjisan.com/qrr-frontend",
+  "homepage": "https://qr-squared.web.app",
   "dependencies": {
     "@material-ui/core": "^4.9.9",
     "@material-ui/icons": "^4.9.1",

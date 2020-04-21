@@ -143,7 +143,7 @@ const InstructionUpdateForm = (props) => {
   const [ingredientIds, setIngredientIds] = useState(
     data.instruction.ingredients.map((ingredient) => ingredient.id)
   );
-  console.log({ingredientIds});
+  console.log({ ingredientIds });
   const onTextChange = (event) => setText(event.target.value);
   const onCategoryChange = (event) => setCategory(event.target.value);
 
@@ -156,7 +156,7 @@ const InstructionUpdateForm = (props) => {
     try {
       const newInsruction = await updateInstruction();
       if (newInsruction) {
-        console.log("update worked")
+        console.log('update worked');
       }
     } catch (err) {
       console.error(err);
@@ -238,18 +238,20 @@ const InstructionUpdateForm = (props) => {
                           get(data, 'instruction.recipe.ingredients'),
                           (ingredient) => ingredient.id === value
                         );
-                        return (
-                          <Chip
-                            key={value}
-                            label={`${
-                              ingredientBasedOnId.item.name
-                            } - ${ingredientBasedOnId.qty} ${
-                              ingredientBasedOnId.uom &&
-                              `- ${ingredientBasedOnId.uom.name}`
-                            } `}
-                            className={classes.chip}
-                          />
-                        );
+                        if (ingredientBasedOnId) {
+                          return (
+                            <Chip
+                              key={value}
+                              label={`${
+                                ingredientBasedOnId.item.name
+                              } - ${ingredientBasedOnId.qty} ${
+                                ingredientBasedOnId.uom &&
+                                `- ${ingredientBasedOnId.uom.name}`
+                              } `}
+                              className={classes.chip}
+                            />
+                          );
+                        }
                       })}
                     </div>
                   )}
@@ -300,7 +302,7 @@ const InstructionUpdate = (props) => {
         variables={{ id: instructionId }}
       >
         {({ data, error, loading }) => {
-          return (!data.loading && get(data, "instruction") ?
+          return !data.loading && get(data, 'instruction') ? (
             <InstructionUpdateForm
               data={data}
               error={error}
@@ -308,7 +310,9 @@ const InstructionUpdate = (props) => {
               instructionId={instructionId}
               classes={classes}
               history={history}
-            /> : "loading..."
+            />
+          ) : (
+            'loading...'
           );
         }}
       </Query>
