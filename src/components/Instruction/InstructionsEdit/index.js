@@ -5,7 +5,7 @@ import { get, isEmpty } from 'lodash';
 import { Link, useParams, withRouter } from 'react-router-dom';
 
 import List from '@material-ui/core/List';
-import { Edit } from '@material-ui/icons';
+import { Edit, Cached } from '@material-ui/icons';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import ListItem from '@material-ui/core/ListItem';
@@ -42,9 +42,11 @@ const GET_RECIPE_INSTRUCTIONS = gql`
 
           qty
           item {
+            id
             name
           }
           uom {
+            id
             name
             alias
           }
@@ -154,11 +156,19 @@ const InstructionsEdit = (props) => {
       </Link>
 
       <Query query={GET_RECIPE_INSTRUCTIONS} variables={{ recipeId }}>
-        {({ data, loading, error }) => {
+        {({ data, loading, error, refetch }) => {
           return (
             <>
               <Typography variant="h4">
                 {get(data, 'recipe.name')} Instructions
+                <Button
+                  onClick={() => refetch()}
+                  color="secondary"
+                  variant="outlined"
+                  className={classes.fontIcon}
+                >
+                  <Cached />
+                </Button>
               </Typography>
               {get(data, 'recipe.instructions') && !loading ? (
                 <Instructions

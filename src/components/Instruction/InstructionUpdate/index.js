@@ -38,6 +38,7 @@ const UPDATE_INSTRUCTION = gql`
       textIngredients: $textIngredients
     ) {
       id
+      category
       ingredients {
         item {
           name
@@ -50,6 +51,7 @@ const UPDATE_INSTRUCTION = gql`
 const GET_INSTRUCTION = gql`
   query($id: ID!) {
     instruction(id: $id) {
+      category
       text
       textIngredients {
         wordIndex
@@ -88,6 +90,12 @@ const GET_INSTRUCTION = gql`
         }
       }
     }
+  }
+`;
+
+const DELETE_INSTRUCTION = gql`
+  mutation($id: ID!, $recipeId: ID!) {
+    deleteInstruction(id: $id, recipeId: $recipeId)
   }
 `;
 
@@ -143,7 +151,6 @@ const InstructionUpdateForm = (props) => {
   const [ingredientIds, setIngredientIds] = useState(
     data.instruction.ingredients.map((ingredient) => ingredient.id)
   );
-  console.log({ ingredientIds });
   const onTextChange = (event) => setText(event.target.value);
   const onCategoryChange = (event) => setCategory(event.target.value);
 
@@ -157,6 +164,18 @@ const InstructionUpdateForm = (props) => {
       const newInsruction = await updateInstruction();
       if (newInsruction) {
         console.log('update worked');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const onDelete = async (event, deleteInstruction, recipeId) => {
+    event.preventDefault();
+    try {
+      const deletedInstruction = await deleteInstruction();
+      if (deletedInstruction) {
+        history.push(`/edit-instructions/${recipeId}`);
       }
     } catch (err) {
       console.error(err);
@@ -181,7 +200,8 @@ const InstructionUpdateForm = (props) => {
           id: instructionId,
           recipeId: Number(recipeId),
           text,
-          ingredientIds
+          ingredientIds,
+          category
         }}
       >
         {(updateInstruction, mutationProps) => (
@@ -287,6 +307,26 @@ const InstructionUpdateForm = (props) => {
           </form>
         )}
       </Mutation>
+      <Mutation
+        mutation={DELETE_INSTRUCTION}
+        variables={{ id: instructionId, recipeId }}
+      >
+        {(deleteInstruction, deleteIngredientMutationProps) => {
+          return (
+            <Button
+              variant="contained"
+              bgcolor="error"
+              className={classes.button}
+              onClick={(event) =>
+                onDelete(event, deleteInstruction, recipeId)
+              }
+              style={{ marginTop: 10 }}
+            >
+              Delete Instruction
+            </Button>
+          );
+        }}
+      </Mutation>
     </>
   );
 };
@@ -302,7 +342,7 @@ const InstructionUpdate = (props) => {
         variables={{ id: instructionId }}
       >
         {({ data, error, loading }) => {
-          return !data.loading && get(data, 'instruction') ? (
+          return !get(data, 'loading') && get(data, 'instruction') ? (
             <InstructionUpdateForm
               data={data}
               error={error}
