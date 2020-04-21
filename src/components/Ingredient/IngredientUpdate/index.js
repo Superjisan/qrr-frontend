@@ -11,7 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 
-import Alert from "../../Alert";
+import Alert from '../../Alert';
 import ErrorMessage from '../../Error';
 
 const UPDATE_INGREDIENT = gql`
@@ -86,6 +86,12 @@ const useStyles = (theme) => ({
   },
   saveButton: {
     width: '100%'
+  },
+  deleteButton: {
+    backgroundColor: theme.palette.error.main,
+    color: theme.palette.error.contrastText,
+    width: '100%',
+    marginTop: 10
   }
 });
 
@@ -129,10 +135,10 @@ const IngredientUpdateForm = (props) => {
     try {
       const updatedIngredient = await updateIngredient();
       if (updatedIngredient) {
-        setSuccessOpen(true)
+        setSuccessOpen(true);
       }
     } catch (err) {
-      setErrorOpen(true)
+      setErrorOpen(true);
       console.error(err);
     }
   };
@@ -145,6 +151,7 @@ const IngredientUpdateForm = (props) => {
         history.push(`/edit-ingredients/${recipeId}`);
       }
     } catch (err) {
+      setErrorOpen(true);
       console.error(err);
     }
   };
@@ -288,11 +295,10 @@ const IngredientUpdateForm = (props) => {
             <Button
               variant="contained"
               bgcolor="error"
-              className={classes.button}
+              className={classes.deleteButton}
               onClick={(event) =>
                 onDelete(event, deleteIngredient, recipeId)
               }
-              style={{ marginTop: 10 }}
             >
               Delete Ingredient
             </Button>

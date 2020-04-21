@@ -5,18 +5,19 @@ import { Mutation, Query } from 'react-apollo';
 import { Link, useParams, withRouter } from 'react-router-dom';
 
 import Chip from '@material-ui/core/Chip';
-import { withStyles } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
+import Input from '@material-ui/core/Input';
 import Select from '@material-ui/core/Select';
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar';
 import MenuItem from '@material-ui/core/MenuItem';
 import Container from '@material-ui/core/Container';
-import Button from '@material-ui/core/Button';
-import Input from '@material-ui/core/Input';
-import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 
+import Alert from '../../Alert';
 import ErrorMessage from '../../Error';
-import * as routes from '../../../constants/routes';
 
 const UPDATE_INSTRUCTION = gql`
   mutation(
@@ -124,6 +125,11 @@ const useStyles = (theme) => ({
     margin: theme.spacing(1),
     minWidth: 120,
     width: '100%'
+  },
+  deleteButton: {
+    backgroundColor: theme.palette.error.main,
+    color: theme.palette.error.contrastText,
+    width: '100%'
   }
 });
 
@@ -149,11 +155,16 @@ const InstructionUpdateForm = (props) => {
     instructionId
   } = props;
   const recipeId = data.instruction.recipe.id;
+
+  const [isErrorOpen, setErrorOpen] = useState(false);
+  const [isSuccessOpen, setSuccessOpen] = useState(false);
+
   const [text, setText] = useState(data.instruction.text);
   const [category, setCategory] = useState(data.instruction.category);
   const [ingredientIds, setIngredientIds] = useState(
     data.instruction.ingredients.map((ingredient) => ingredient.id)
   );
+
   const onTextChange = (event) => setText(event.target.value);
   const onCategoryChange = (event) => setCategory(event.target.value);
 
@@ -166,9 +177,10 @@ const InstructionUpdateForm = (props) => {
     try {
       const newInsruction = await updateInstruction();
       if (newInsruction) {
-        console.log('update worked');
+        setSuccessOpen(true);
       }
     } catch (err) {
+      setErrorOpen(true);
       console.error(err);
     }
   };
@@ -181,8 +193,25 @@ const InstructionUpdateForm = (props) => {
         history.push(`/edit-instructions/${recipeId}`);
       }
     } catch (err) {
+      setErrorOpen(true);
       console.error(err);
     }
+  };
+
+  const handleSuccessClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSuccessOpen(false);
+  };
+
+  const handleErrorClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorOpen(false);
   };
 
   const isInvalid = text === '';
@@ -319,7 +348,7 @@ const InstructionUpdateForm = (props) => {
             <Button
               variant="contained"
               bgcolor="error"
-              className={classes.button}
+              className={classes.deleteButton}
               onClick={(event) =>
                 onDelete(event, deleteInstruction, recipeId)
               }
@@ -330,6 +359,24 @@ const InstructionUpdateForm = (props) => {
           );
         }}
       </Mutation>
+      <Snackbar
+        open={isSuccessOpen}
+        autoHideDuration={6000}
+        onClose={handleSuccessClose}
+      >
+        <Alert onClose={handleSuccessClose} severity="success">
+          Recipe Saved
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={isErrorOpen}
+        autoHideDuration={6000}
+        onClose={handleErrorClose}
+      >
+        <Alert onClose={handleErrorClose} severity="error">
+          Something Went Wrong
+        </Alert>
+      </Snackbar>
     </>
   );
 };

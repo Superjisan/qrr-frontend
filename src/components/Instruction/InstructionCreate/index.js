@@ -1,22 +1,23 @@
-import { get, uniqBy, find } from 'lodash';
 import gql from 'graphql-tag';
 import React, { useState } from 'react';
+import { get, uniqBy, find } from 'lodash';
 import { Mutation, Query } from 'react-apollo';
 import { Link, useParams, withRouter } from 'react-router-dom';
 
 import Chip from '@material-ui/core/Chip';
-import { withStyles } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Container from '@material-ui/core/Container';
-import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
-import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core';
+import MenuItem from '@material-ui/core/MenuItem';
+import Snackbar from '@material-ui/core/Snackbar';
+import TextField from '@material-ui/core/TextField';
+import Container from '@material-ui/core/Container';
 import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 
+import Alert from '../../Alert';
 import ErrorMessage from '../../Error';
-import * as routes from '../../../constants/routes';
 
 const ADD_INSTRUCTION_TO_RECIPE = gql`
   mutation(
@@ -105,9 +106,12 @@ const MenuProps = {
 const InstructionCreate = (props) => {
   let { recipeId } = useParams();
   const { classes, history } = props;
+  
   const [text, setText] = useState('');
   const [category, setCategory] = useState('');
+  const [isErrorOpen, setErrorOpen] = useState(false);
   const [ingredientIds, setIngredientIds] = useState([]);
+
   const onTextChange = (event) => setText(event.target.value);
   const onCategoryChange = (event) => setCategory(event.target.value);
 
@@ -123,8 +127,17 @@ const InstructionCreate = (props) => {
         history.push(`/edit-instructions/${recipeId}`);
       }
     } catch (err) {
+      setErrorOpen(true)
       console.error(err);
     }
+  };
+
+  const handleErrorClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorOpen(false);
   };
 
   const isInvalid = text === '';
@@ -260,6 +273,15 @@ const InstructionCreate = (props) => {
           );
         }}
       </Query>
+      <Snackbar
+        open={isErrorOpen}
+        autoHideDuration={6000}
+        onClose={handleErrorClose}
+      >
+        <Alert onClose={handleErrorClose} severity="error">
+          Something Went Wrong
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
