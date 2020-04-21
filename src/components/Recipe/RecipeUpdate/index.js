@@ -8,6 +8,8 @@ import { withStyles, Typography } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import * as routes from '../../../constants/routes';
 import withSession from '../../Session/withSession';
@@ -105,8 +107,16 @@ const useStyles = (theme) => {
   };
 };
 
+const Alert = (props) => {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 const RecipeUpdateForm = (props) => {
   const { data, loading, error, classes } = props;
+
+  const [isSuccessOpen, setSuccessOpen] = useState(false);
+  const [isErrorOpen, setErrorOpen] = useState(false);
+
   const [id, setId] = useState(get(data, 'recipe.id'));
   const [name, setName] = useState(get(data, 'recipe.name'));
   const [rating, setRating] = useState(get(data, 'recipe.rating'));
@@ -137,9 +147,11 @@ const RecipeUpdateForm = (props) => {
       const recipe = await updateRecipe();
       if (recipe) {
         console.log('update worked');
+        setSuccessOpen(true)
         return recipe;
       }
     } catch (error) {
+      setErrorOpen(true)
       console.error(error);
     }
   };
@@ -155,6 +167,22 @@ const RecipeUpdateForm = (props) => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleSuccessClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSuccessOpen(false);
+  };
+
+  const handleErrorClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorOpen(false);
   };
 
   const isInvalid = name === '';
@@ -303,6 +331,24 @@ const RecipeUpdateForm = (props) => {
           Edit Instructions
         </Button>
       </Link>
+      <Snackbar
+        open={isSuccessOpen}
+        autoHideDuration={6000}
+        onClose={handleSuccessClose}
+      >
+        <Alert onClose={handleSuccessClose} severity="success">
+          Recipe Saved
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={isErrorOpen}
+        autoHideDuration={6000}
+        onClose={handleErrorClose}
+      >
+        <Alert onClose={handleErrorClose} severity="error">
+          Something Went Wrong
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
