@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Mutation, Query } from 'react-apollo';
 import { Link, useParams, withRouter } from 'react-router-dom';
 
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, Typography } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
@@ -94,6 +94,9 @@ const useStyles = (theme) => {
       marginBottom: 10,
       width: `100%`
     },
+    h4: {
+      marginBottom: 10
+    },
     deleteButton: {
       backgroundColor: theme.palette.error.main,
       color: theme.palette.error.contrastText,
@@ -181,7 +184,13 @@ const RecipeUpdateForm = (props) => {
                   Back To Recipes
                 </Button>
               </Link>
-
+              <Typography
+                align="center"
+                variant="h4"
+                className={classes.h4}
+              >
+                Recipe Update
+              </Typography>
               <form
                 onSubmit={(event) => onSubmit(event, updateRecipe)}
               >

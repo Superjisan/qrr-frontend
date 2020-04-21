@@ -4,7 +4,7 @@ import { Query } from 'react-apollo';
 import React from 'react';
 import { Link, useParams, withRouter } from 'react-router-dom';
 
-import { Edit } from '@material-ui/icons';
+import { Edit, Cached } from '@material-ui/icons';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -25,9 +25,11 @@ const GET_RECIPE_INGREDIENTS = gql`
         id
         qty
         item {
+          id
           name
         }
         uom {
+          id
           name
           alias
         }
@@ -122,11 +124,19 @@ const IngredientsEdit = (props) => {
       </Link>
 
       <Query query={GET_RECIPE_INGREDIENTS} variables={{ recipeId }}>
-        {({ data, loading, error }) => {
+        {({ data, loading, error, refetch }) => {
           return (
             <>
               <Typography variant="h4">
                 {get(data, 'recipe.name')} Ingredients
+                <Button
+                  onClick={() => refetch()}
+                  color="secondary"
+                  variant="outlined"
+                  className={classes.fontIcon}
+                >
+                  <Cached />
+                </Button>
               </Typography>
               {get(data, 'recipe.ingredients') && !loading ? (
                 <Ingredients
