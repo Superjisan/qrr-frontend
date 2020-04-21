@@ -9,9 +9,10 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
 
+import Alert from "../../Alert";
 import ErrorMessage from '../../Error';
-import * as routes from '../../../constants/routes';
 
 const ADD_INGREDIENT_TO_RECIPE = gql`
   mutation(
@@ -66,10 +67,12 @@ const useStyles = (theme) => ({
 const IngredientCreate = (props) => {
   let { recipeId } = useParams();
   const { classes, history } = props;
+
   const [qty, setQty] = useState(1);
   const [itemName, setItemName] = useState('');
   const [itemId, setItemId] = useState();
   const [uomId, setUomId] = useState();
+  const [isErrorOpen, setErrorOpen] = useState(false);
 
   const onQtyChange = (event) => {
     setQty(Number(event.target.value));
@@ -95,8 +98,17 @@ const IngredientCreate = (props) => {
             history.push(`/edit-ingredients/${recipeId}`)
         }
     } catch(err) {
+        setErrorOpen(true)
         console.error(err)
     }
+  };
+
+  const handleErrorClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorOpen(false);
   };
 
   const isItemNameDisabled = !!itemId;
@@ -214,6 +226,15 @@ const IngredientCreate = (props) => {
           );
         }}
       </Query>
+      <Snackbar
+        open={isErrorOpen}
+        autoHideDuration={6000}
+        onClose={handleErrorClose}
+      >
+        <Alert onClose={handleErrorClose} severity="error">
+          Something Went Wrong
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

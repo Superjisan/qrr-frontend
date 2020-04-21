@@ -3,15 +3,15 @@ import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import { Link } from 'react-router-dom';
 
-import { withStyles, Typography } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
-import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
+import Container from '@material-ui/core/Container';
+import TextField from '@material-ui/core/TextField';
+import { withStyles, Typography } from '@material-ui/core';
 
-import withSession from '../../Session/withSession';
-import ErrorMessage from '../../Error';
 import Alert from "../../Alert";
+import ErrorMessage from '../../Error';
+import withSession from '../../Session/withSession';
 
 import * as routes from '../../../constants/routes';
 
