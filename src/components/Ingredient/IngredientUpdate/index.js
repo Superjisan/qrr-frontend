@@ -4,14 +4,15 @@ import React, { useState } from 'react';
 import { Mutation, Query } from 'react-apollo';
 import { Link, useParams, withRouter } from 'react-router-dom';
 
-import { withStyles } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
-import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar';
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
+import Container from '@material-ui/core/Container';
 
+import Alert from "../../Alert";
 import ErrorMessage from '../../Error';
-import * as routes from '../../../constants/routes';
 
 const UPDATE_INGREDIENT = gql`
   mutation(
@@ -99,8 +100,11 @@ const IngredientUpdateForm = (props) => {
   } = props;
   const recipeId = data.ingredient.recipe.id;
 
+  const [isSuccessOpen, setSuccessOpen] = useState(false);
+  const [isErrorOpen, setErrorOpen] = useState(false);
+
   const [qty, setQty] = useState(data.ingredient.qty);
-  const [itemName, setItemName] = useState(data.ingredient.item.name);
+  const [itemName, setItemName] = useState('');
   const [itemId, setItemId] = useState(data.ingredient.item.id);
   const [uomId, setUomId] = useState(get(data, 'ingredient.uom.id'));
 
@@ -125,9 +129,10 @@ const IngredientUpdateForm = (props) => {
     try {
       const updatedIngredient = await updateIngredient();
       if (updatedIngredient) {
-        console.log('updated ingredient');
+        setSuccessOpen(true)
       }
     } catch (err) {
+      setErrorOpen(true)
       console.error(err);
     }
   };
@@ -136,13 +141,29 @@ const IngredientUpdateForm = (props) => {
     event.preventDefault();
     try {
       const deletedIngredient = await deleteIngredient();
-      if(deletedIngredient) {
-        history.push(`/edit-ingredients/${recipeId}`)
+      if (deletedIngredient) {
+        history.push(`/edit-ingredients/${recipeId}`);
       }
-    }catch (err) {
-      console.error(err)
+    } catch (err) {
+      console.error(err);
     }
-  }
+  };
+
+  const handleSuccessClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSuccessOpen(false);
+  };
+
+  const handleErrorClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorOpen(false);
+  };
 
   const isItemNameDisabled = !!itemId;
   const isInvalid = qty === '';
@@ -258,14 +279,19 @@ const IngredientUpdateForm = (props) => {
           </>
         )}
       </Mutation>
-      <Mutation mutation={DELETE_INGREDIENT} variables={{ ingredientId, recipeId }}>
+      <Mutation
+        mutation={DELETE_INGREDIENT}
+        variables={{ ingredientId, recipeId }}
+      >
         {(deleteIngredient, deleteIngredientMutationProps) => {
           return (
             <Button
               variant="contained"
               bgcolor="error"
               className={classes.button}
-              onClick={(event) => onDelete(event, deleteIngredient, recipeId)}
+              onClick={(event) =>
+                onDelete(event, deleteIngredient, recipeId)
+              }
               style={{ marginTop: 10 }}
             >
               Delete Ingredient
@@ -273,6 +299,24 @@ const IngredientUpdateForm = (props) => {
           );
         }}
       </Mutation>
+      <Snackbar
+        open={isSuccessOpen}
+        autoHideDuration={6000}
+        onClose={handleSuccessClose}
+      >
+        <Alert onClose={handleSuccessClose} severity="success">
+          Recipe Saved
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={isErrorOpen}
+        autoHideDuration={6000}
+        onClose={handleErrorClose}
+      >
+        <Alert onClose={handleErrorClose} severity="error">
+          Something Went Wrong
+        </Alert>
+      </Snackbar>
     </>
   );
 };
