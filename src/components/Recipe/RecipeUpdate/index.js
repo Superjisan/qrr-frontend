@@ -9,11 +9,11 @@ import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
 
 import * as routes from '../../../constants/routes';
 import withSession from '../../Session/withSession';
 import ErrorMessage from '../../Error';
+import Alert from "../../Alert";
 
 const UPDATE_RECIPE = gql`
   mutation(
@@ -106,10 +106,6 @@ const useStyles = (theme) => {
     }
   };
 };
-
-const Alert = (props) => {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 
 const RecipeUpdateForm = (props) => {
   const { data, loading, error, classes } = props;

@@ -5,12 +5,13 @@ import { Link } from 'react-router-dom';
 
 import { withStyles, Typography } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
-import MenuItem from '@material-ui/core/MenuItem';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
 
 import withSession from '../../Session/withSession';
 import ErrorMessage from '../../Error';
+import Alert from "../../Alert";
 
 import * as routes from '../../../constants/routes';
 
@@ -42,7 +43,10 @@ const useStyles = (theme) => ({
 
 const RecipeCreate = (props) => {
   const { session, classes } = props;
+
   const [name, setName] = useState('');
+  const [isSuccessOpen, setSuccessOpen] = useState(false);
+  const [isErrorOpen, setErrorOpen] = useState(false);
 
   const onChange = (event) => {
     const { name, value } = event.target;
@@ -53,11 +57,32 @@ const RecipeCreate = (props) => {
     event.preventDefault();
 
     try {
-      await addRecipe();
-      setName('');
+      const recipe = await addRecipe();
+      if(recipe) {
+
+        setName('');
+        setSuccessOpen(true)
+      }
     } catch (error) {
       console.error(error);
+      setErrorOpen(true)
     }
+  };
+
+  const handleSuccessClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSuccessOpen(false);
+  };
+
+  const handleErrorClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setErrorOpen(false);
   };
 
   const isInvalid = name === '';
@@ -110,6 +135,24 @@ const RecipeCreate = (props) => {
       ) : (
         `Not Allowed To Add Recipe, You Must Sign In`
       )}
+      <Snackbar
+        open={isSuccessOpen}
+        autoHideDuration={6000}
+        onClose={handleSuccessClose}
+      >
+        <Alert onClose={handleSuccessClose} severity="success">
+          Recipe Saved
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={isErrorOpen}
+        autoHideDuration={6000}
+        onClose={handleErrorClose}
+      >
+        <Alert onClose={handleErrorClose} severity="error">
+          Something Went Wrong
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
