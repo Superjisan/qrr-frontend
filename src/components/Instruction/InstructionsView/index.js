@@ -49,7 +49,7 @@ const GET_RECIPE_INSTRUCTIONS = gql`
 
 const useStyles = (theme) => ({
   linkButton: {
-    width: '`100%',
+    width: '`100%'
   },
   paperRoot: {
     paddingTop: theme.spacing(2),
@@ -57,8 +57,8 @@ const useStyles = (theme) => ({
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
     marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-  },
+    marginBottom: theme.spacing(2)
+  }
 });
 
 const Instructions = (props) => {
@@ -83,15 +83,17 @@ const Instructions = (props) => {
                 </Typography>
                 {get(instruction, 'ingredients').map((ingredient) => {
                   return (
-                    <ListItem key={`instruction-${instruction.id}-ingredients-${ingredient.id}`}>
+                    <ListItem
+                      key={`instruction-${instruction.id}-ingredients-${ingredient.id}`}
+                    >
                       <ListItemText
                         primary={`Item: ${get(
                           ingredient,
-                          'item.name',
+                          'item.name'
                         )}`}
                         secondary={`Quantity: ${get(
                           ingredient,
-                          'qty',
+                          'qty'
                         )} ${
                           get(ingredient, 'uom') &&
                           ` 
@@ -147,5 +149,5 @@ const InstructionsView = (props) => {
 };
 
 export default withStyles(useStyles, { withTheme: true })(
-  withRouter(withSession(InstructionsView)),
+  withRouter(withSession(InstructionsView))
 );

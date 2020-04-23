@@ -33,7 +33,7 @@ const GET_RECIPE_INGREDIENTS = gql`
 
 const useStyles = (theme) => ({
   linkButton: {
-    width: '`100%',
+    width: '`100%'
   },
   paperRoot: {
     paddingTop: theme.spacing(2),
@@ -41,8 +41,8 @@ const useStyles = (theme) => ({
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
     marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-  },
+    marginBottom: theme.spacing(2)
+  }
 });
 
 const Ingredients = (props) => {
@@ -51,7 +51,11 @@ const Ingredients = (props) => {
     <div>
       {data.recipe.ingredients.map((ingredient) => {
         return (
-          <Paper variant="outlined" key={`ingredient-${ingredient.id}`} className={classes.paperRoot}>
+          <Paper
+            variant="outlined"
+            key={`ingredient-${ingredient.id}`}
+            className={classes.paperRoot}
+          >
             <Typography>
               Item: {get(ingredient, 'item.name')}
             </Typography>
@@ -81,12 +85,19 @@ const IngredientsView = (props) => {
           Back To Recipes
         </Button>
       </Link>
-     
+      <Link to={`/view-recipe/${recipeId}`}>
+        <Button variant="outlined" color="secondary">
+          View Recipe
+        </Button>
+      </Link>
+
       <Query query={GET_RECIPE_INGREDIENTS} variables={{ recipeId }}>
         {({ data, loading, error }) => {
           return (
             <>
-                 <Typography variant="h3">{get(data, "recipe.name")} Ingredients</Typography>
+              <Typography variant="h3">
+                {get(data, 'recipe.name')} Ingredients
+              </Typography>
               {get(data, 'recipe.ingredients') && !loading ? (
                 <Ingredients
                   data={data}
@@ -105,5 +116,5 @@ const IngredientsView = (props) => {
 };
 
 export default withStyles(useStyles, { withTheme: true })(
-  withRouter(withSession(IngredientsView)),
+  withRouter(withSession(IngredientsView))
 );

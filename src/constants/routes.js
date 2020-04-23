@@ -6,6 +6,7 @@ export const ADMIN = '/admin';
 
 export const ADD_RECIPE="/add-recipe";
 export const UPDATE_RECIPE="/update-recipe/:id";
+export const VIEW_RECIPE="/view-recipe/:id"
 
 export const VIEW_INSTRUCTIONS="/view-instructions/:recipeId";
 export const ADD_INSTRUCTION="/add-instruction/:recipeId";

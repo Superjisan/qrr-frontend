@@ -39,6 +39,7 @@ const ADD_INSTRUCTION_TO_RECIPE = gql`
       id
       ingredients {
         item {
+          id
           name
         }
       }
@@ -58,6 +59,7 @@ const GET_RECIPE_INGREDIENTS = gql`
           name
         }
         uom {
+          id
           name
           alias
         }
@@ -106,7 +108,7 @@ const MenuProps = {
 const InstructionCreate = (props) => {
   let { recipeId } = useParams();
   const { classes, history } = props;
-  
+
   const [text, setText] = useState('');
   const [category, setCategory] = useState('');
   const [isErrorOpen, setErrorOpen] = useState(false);
@@ -127,7 +129,7 @@ const InstructionCreate = (props) => {
         history.push(`/edit-instructions/${recipeId}`);
       }
     } catch (err) {
-      setErrorOpen(true)
+      setErrorOpen(true);
       console.error(err);
     }
   };
@@ -221,15 +223,15 @@ const InstructionCreate = (props) => {
                                 (ingredient) =>
                                   ingredient.id === value
                               );
-                              console.log({ ingredientBasedOnId });
                               return (
                                 <Chip
                                   key={value}
                                   label={`${
                                     ingredientBasedOnId.item.name
                                   } - ${ingredientBasedOnId.qty} ${
-                                    ingredientBasedOnId.uom &&
-                                    `- ${ingredientBasedOnId.uom.name}`
+                                    ingredientBasedOnId.uom
+                                      ? `- ${ingredientBasedOnId.uom.name}`
+                                      : ''
                                   } `}
                                   className={classes.chip}
                                 />
@@ -248,8 +250,9 @@ const InstructionCreate = (props) => {
                               {`${ingredient.item.name} - ${
                                 ingredient.qty
                               } ${
-                                ingredient.uom &&
-                                `- ${ingredient.uom.name}`
+                                ingredient.uom
+                                  ? `- ${ingredient.uom.name}`
+                                  : ''
                               } `}
                             </MenuItem>
                           )

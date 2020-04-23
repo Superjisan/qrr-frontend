@@ -38,8 +38,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     graphQLErrors.forEach(({ message, locations, path }) => {
       console.log('GraphQL error', message);
-
-      if (message === 'UNAUTHENTICATED') {
+      if (message.indexOf('UNAUTHENTICATED') !== -1) {
         signOut(client);
       }
     });

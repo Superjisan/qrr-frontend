@@ -3,7 +3,7 @@ import { Query } from 'react-apollo';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Edit, Cached } from '@material-ui/icons';
+import { Edit, Cached, Visibility } from '@material-ui/icons';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
@@ -112,6 +112,9 @@ const RecipesBase = (props) => {
                   >
                     <Typography variant="h5">
                       {recipe.name}
+                      <Link to={`view-recipe/${recipe.id}`}>
+                        <Visibility className={classes.fontIcon} />
+                      </Link>
                       {session &&
                         session.me &&
                         recipe.author.id === session.me.id && (

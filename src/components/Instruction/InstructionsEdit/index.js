@@ -117,10 +117,11 @@ const Instructions = (props) => {
                           ingredient,
                           'qty'
                         )} ${
-                          get(ingredient, 'uom') &&
-                          ` 
+                          get(ingredient, 'uom')
+                            ? ` 
                                 ${get(ingredient, 'uom.name')} - 
                                 ${get(ingredient, 'uom.alias')}`
+                            : ''
                         }`}
                       />
                     </ListItem>
