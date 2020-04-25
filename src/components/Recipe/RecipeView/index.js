@@ -6,6 +6,10 @@ import { Link, useParams, withRouter } from 'react-router-dom';
 
 import { Visibility } from '@material-ui/icons';
 import Paper from '@material-ui/core/Paper';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+
 import { withStyles, Typography } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
@@ -22,6 +26,7 @@ const GET_RECIPE = gql`
       originUrl
       originText
       cookingTime
+      imageUrl
       ingredients {
         id
         qty
@@ -58,6 +63,9 @@ const GET_RECIPE = gql`
 
 const useStyles = (theme) => {
   return {
+    card: {
+      display: 'flex'
+    },
     root: {
       '& .MuiTextField-root': {
         margin: theme.spacing(1),
@@ -100,6 +108,16 @@ const useStyles = (theme) => {
       float: 'right',
       marginRight: 5,
       cursor: 'pointer'
+    },
+    media: {
+      width: 150
+    },
+    details: {
+      display: 'flex',
+      flexDirection: 'column'
+    },
+    content: {
+      flex: '1 0 auto'
     }
   };
 };
@@ -118,26 +136,38 @@ const RecipeView = (props) => {
         {({ data, loading, refetch }) => {
           return !data.loading && data.recipe ? (
             <>
-              <Paper className={classes.paperRoot} variant="outlined">
-                <Typography variant="h4">
-                  Recipe - {get(data.recipe, 'name')}
-                </Typography>
-                {get(data, 'recipe.cookingTime') && (
-                  <Typography variant="h5">
-                    Cooking Time: {get(data, 'recipe.cookingTime')}
-                  </Typography>
+              <Card className={classes.card}>
+                <div className={classes.details}>
+                  <CardContent className={classes.content}>
+                    <Typography variant="h4">
+                      Recipe - {get(data.recipe, 'name')}
+                    </Typography>
+
+                    {get(data, 'recipe.cookingTime') && (
+                      <Typography variant="h5">
+                        Cooking Time:{' '}
+                        {get(data, 'recipe.cookingTime')}
+                      </Typography>
+                    )}
+                    {get(data, 'recipe.originUrl') && (
+                      <Typography>
+                        <MuiLink
+                          href={get(data, 'recipe.originUrl')}
+                          target="_blank"
+                        >
+                          Recipe Website
+                        </MuiLink>
+                      </Typography>
+                    )}
+                  </CardContent>
+                </div>
+                {get(data, 'recipe.imageUrl') && (
+                  <CardMedia
+                    className={classes.media}
+                    image={data.recipe.imageUrl}
+                  />
                 )}
-                {get(data, 'recipe.originUrl') && (
-                  <Typography>
-                    <MuiLink
-                      href={get(data, 'recipe.originUrl')}
-                      target="_blank"
-                    >
-                      Recipe Website
-                    </MuiLink>
-                  </Typography>
-                )}
-              </Paper>
+              </Card>
               <Paper className={classes.paperRoot} variant="outlined">
                 <Typography variant="h4">
                   Ingredients
