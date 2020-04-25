@@ -13,7 +13,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import * as routes from '../../../constants/routes';
 import withSession from '../../Session/withSession';
 import ErrorMessage from '../../Error';
-import Alert from "../../Alert";
+import Alert from '../../Alert';
 
 const UPDATE_RECIPE = gql`
   mutation(
@@ -23,6 +23,7 @@ const UPDATE_RECIPE = gql`
     $originUrl: String
     $originText: String
     $cookingTime: String
+    $imageUrl: String
   ) {
     updateRecipe(
       id: $id
@@ -31,6 +32,7 @@ const UPDATE_RECIPE = gql`
       originUrl: $originUrl
       originText: $originText
       cookingTime: $cookingTime
+      imageUrl: $imageUrl
     ) {
       id
       name
@@ -38,6 +40,7 @@ const UPDATE_RECIPE = gql`
       originUrl
       originText
       cookingTime
+      imageUrl
       ingredients {
         id
       }
@@ -57,6 +60,7 @@ const GET_RECIPE = gql`
       originUrl
       originText
       cookingTime
+      imageUrl
       ingredients {
         id
       }
@@ -103,7 +107,8 @@ const useStyles = (theme) => {
       backgroundColor: theme.palette.error.main,
       color: theme.palette.error.contrastText,
       width: '100%'
-    }
+    },
+    imgPreview: {}
   };
 };
 
@@ -125,6 +130,9 @@ const RecipeUpdateForm = (props) => {
   const [cookingTime, setCookingTime] = useState(
     get(data, 'recipe.cookingTime')
   );
+  const [imageUrl, setImageUrl] = useState(
+    get(data, 'recipe.imageUrl')
+  );
 
   const onIdChange = (event) => setId(event.target.value);
   const onNameChange = (event) => setName(event.target.value);
@@ -136,18 +144,18 @@ const RecipeUpdateForm = (props) => {
     setOriginText(event.target.value);
   const onCookingTimeChange = (event) =>
     setCookingTime(event.target.value);
+  const onImageUrlChange = (event) => setImageUrl(event.target.value);
 
   const onSubmit = async (event, updateRecipe) => {
     event.preventDefault();
     try {
       const recipe = await updateRecipe();
       if (recipe) {
-        console.log('update worked');
-        setSuccessOpen(true)
+        setSuccessOpen(true);
         return recipe;
       }
     } catch (error) {
-      setErrorOpen(true)
+      setErrorOpen(true);
       console.error(error);
     }
   };
@@ -157,7 +165,6 @@ const RecipeUpdateForm = (props) => {
     try {
       const deleted = await deleteRecipe();
       if (deleted) {
-        console.log('delete worked');
         props.history.push(routes.LANDING);
       }
     } catch (error) {
@@ -193,7 +200,8 @@ const RecipeUpdateForm = (props) => {
           rating,
           originUrl,
           originText,
-          cookingTime
+          cookingTime,
+          imageUrl
         }}
       >
         {(updateRecipe, mutationProps) => {
@@ -278,6 +286,31 @@ const RecipeUpdateForm = (props) => {
                   name="originText"
                   className={classes.textField}
                 />
+                <TextField
+                  id="origin-text-filled"
+                  label="Image URL"
+                  variant="outlined"
+                  value={imageUrl}
+                  onChange={onImageUrlChange}
+                  placeholder="IMG URL"
+                  name="imageUrl"
+                  className={classes.textField}
+                />
+                {imageUrl && (
+                  <div>
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      className={classes.textField}
+                    >
+                      Image Preview
+                    </Typography>
+                    <img
+                      className={classes.imgPreview}
+                      src={imageUrl}
+                    />
+                  </div>
+                )}
                 {error && <ErrorMessage error={error} />}
 
                 <Button

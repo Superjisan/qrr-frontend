@@ -3,12 +3,13 @@ import { Query } from 'react-apollo';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Edit, Cached, Visibility } from '@material-ui/icons';
 import Paper from '@material-ui/core/Paper';
+import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import { Edit, Cached, Visibility } from '@material-ui/icons';
 
 import * as routes from '../../../constants/routes';
 
@@ -105,7 +106,7 @@ const RecipesBase = (props) => {
               data.recipes &&
               data.recipes.map((recipe) => {
                 return (
-                  <Paper
+                  <Card
                     className={classes.paperRoot}
                     key={recipe.id}
                     variant="outlined"
@@ -150,7 +151,7 @@ const RecipesBase = (props) => {
                         View Instructions
                       </Button>
                     </Link>
-                  </Paper>
+                  </Card>
                 );
               })}
           </Container>
