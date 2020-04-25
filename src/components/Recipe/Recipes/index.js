@@ -3,8 +3,9 @@ import { Query } from 'react-apollo';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -20,6 +21,7 @@ const GET_ALL_RECIPES = gql`
       name
       cookingTime
       rating
+      imageUrl
       author {
         id
         username
@@ -69,6 +71,21 @@ const materialStyles = (theme) => ({
   button: {
     width: '100%',
     marginTop: 10
+  },
+  card: {
+    display: 'flex',
+    marginTop: 10,
+    marginBottom: 10
+  },
+  media: {
+    width: 150
+  },
+  details: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  content: {
+    flex: '1 0 auto'
   }
 });
 
@@ -107,50 +124,62 @@ const RecipesBase = (props) => {
               data.recipes.map((recipe) => {
                 return (
                   <Card
-                    className={classes.paperRoot}
+                    className={classes.card}
                     key={recipe.id}
-                    variant="outlined"
                   >
-                    <Typography variant="h5">
-                      {recipe.name}
-                      <Link to={`view-recipe/${recipe.id}`}>
-                        <Visibility className={classes.fontIcon} />
-                      </Link>
-                      {session &&
-                        session.me &&
-                        recipe.author.id === session.me.id && (
-                          <Link to={`update-recipe/${recipe.id}`}>
-                            <Edit className={classes.fontIcon} />
+                    <div className={classes.details}>
+                      <CardContent className={classes.content}>
+                        <Typography variant="h5">
+                          {recipe.name}
+                          <Link to={`view-recipe/${recipe.id}`}>
+                            <Visibility
+                              className={classes.fontIcon}
+                            />
                           </Link>
-                        )}
-                    </Typography>
-                    <Typography>
-                      # of Ingredients: {recipe.ingredients.length}
-                    </Typography>
-                    <Typography>
-                      {`# of Instructions: ${recipe.instructions.length}`}
-                    </Typography>
-                    <Typography>
-                      Author: {recipe.author.username}
-                    </Typography>
-                    <Link to={`/view-ingredients/${recipe.id}`}>
-                      <Button
-                        className={classes.viewButton}
-                        variant="outlined"
-                        color="secondary"
-                      >
-                        View Ingredients
-                      </Button>
-                    </Link>
-                    <Link to={`/view-instructions/${recipe.id}`}>
-                      <Button
-                        className={classes.viewButton}
-                        variant="outlined"
-                        color="secondary"
-                      >
-                        View Instructions
-                      </Button>
-                    </Link>
+                          {session &&
+                            session.me &&
+                            recipe.author.id === session.me.id && (
+                              <Link to={`update-recipe/${recipe.id}`}>
+                                <Edit className={classes.fontIcon} />
+                              </Link>
+                            )}
+                        </Typography>
+                        <Typography>
+                          # of Ingredients:{' '}
+                          {recipe.ingredients.length}
+                        </Typography>
+                        <Typography>
+                          {`# of Instructions: ${recipe.instructions.length}`}
+                        </Typography>
+                        <Typography>
+                          Author: {recipe.author.username}
+                        </Typography>
+                        <Link to={`/view-ingredients/${recipe.id}`}>
+                          <Button
+                            className={classes.viewButton}
+                            variant="outlined"
+                            color="secondary"
+                          >
+                            View Ingredients
+                          </Button>
+                        </Link>
+                        <Link to={`/view-instructions/${recipe.id}`}>
+                          <Button
+                            className={classes.viewButton}
+                            variant="outlined"
+                            color="secondary"
+                          >
+                            View Instructions
+                          </Button>
+                        </Link>
+                      </CardContent>
+                    </div>
+                      {recipe.imageUrl && (
+                        <CardMedia 
+                          className={classes.media}
+                          image={recipe.imageUrl}
+                        />
+                      )}
                   </Card>
                 );
               })}
