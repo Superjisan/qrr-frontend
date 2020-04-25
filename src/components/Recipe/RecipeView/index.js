@@ -124,7 +124,7 @@ const RecipeView = (props) => {
                 </Typography>
                 {get(data, 'recipe.cookingTime') && (
                   <Typography variant="h5">
-                    Cooking Time: {get(data, 'recipe.cookingTIme')}
+                    Cooking Time: {get(data, 'recipe.cookingTime')}
                   </Typography>
                 )}
                 {get(data, 'recipe.originUrl') && (
