@@ -146,11 +146,16 @@ const RecipesBase = (props) => {
                           {`No. of Ingredients: ${recipe.ingredients.length}`}
                         </Typography>
                         <Typography>
-                          {`No. of Instructions: ${recipe.instructions.length}`}
+                          {`No. of Steps: ${recipe.instructions.length}`}
                         </Typography>
                         <Typography>
                           Author: {recipe.author.username}
                         </Typography>
+                        {recipe.cookingTime && (
+                          <Typography>
+                            Cooking Time: {recipe.cookingTime}
+                          </Typography>
+                        )}
                         <Link to={`/view-ingredients/${recipe.id}`}>
                           <Button
                             className={classes.viewButton}
