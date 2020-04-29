@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import Card from '@material-ui/core/Card';
@@ -9,14 +9,16 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
-import { Edit, Cached, Visibility } from '@material-ui/icons';
+import { Edit, Cached, Visibility, Search } from '@material-ui/icons';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 import * as routes from '../../../constants/routes';
 
-const GET_ALL_RECIPES = gql`
-  query {
-    recipes {
+const GET_RECIPE_BY_NAME = gql`
+  query($name: String) {
+    recipeSearchByName(name: $name) {
       id
       name
       cookingTime
@@ -83,18 +85,28 @@ const materialStyles = (theme) => ({
   details: {
     display: 'flex',
     flexDirection: 'column',
-    width:'100%'
+    width: '100%'
   },
   content: {
     flex: '1 0 auto'
+  },
+  textField: {
+    marginBottom: 10,
+    width: `100%`,
+    marginTop: 10
   }
 });
 
 const RecipesBase = (props) => {
   const { classes, session } = props;
+  const [name, setName] = useState('');
+
+  const onNameChange = event => {
+    setName(event.target.value);
+  }
 
   return (
-    <Query query={GET_ALL_RECIPES}>
+    <Query query={GET_RECIPE_BY_NAME} variables={{name}}>
       {({ data, loading, error, refetch }) => {
         return (
           <Container maxWidth="sm">
@@ -109,6 +121,21 @@ const RecipesBase = (props) => {
                 <Cached />
               </Button>
             </Typography>
+            <TextField
+              variant="outlined"
+              label="Search for Recipe Name"
+              placeholder="Recipe Name"
+              className={classes.textField}
+              onChange={event => onNameChange(event)}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Search />
+                  </InputAdornment>
+                )
+              }}
+            />
+            
             {session && session.me && (
               <Link to={routes.ADD_RECIPE}>
                 <Button
@@ -121,8 +148,8 @@ const RecipesBase = (props) => {
               </Link>
             )}
             {data &&
-              data.recipes &&
-              data.recipes.map((recipe) => {
+              data.recipeSearchByName &&
+              data.recipeSearchByName.map((recipe) => {
                 return (
                   <Card className={classes.card} key={recipe.id}>
                     <div className={classes.details}>
