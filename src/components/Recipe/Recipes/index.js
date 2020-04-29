@@ -145,7 +145,7 @@ const RecipesBase = (props) => {
                           {`No. of Ingredients: ${recipe.ingredients.length}`}
                         </Typography>
                         <Typography>
-                          {`No. of Instructions: ${recipe.instructions.length}`}
+                          {`No. of Steps: ${recipe.instructions.length}`}
                         </Typography>
                         <Typography>
                           Author: {recipe.author.username}
