@@ -123,10 +123,7 @@ const RecipesBase = (props) => {
               data.recipes &&
               data.recipes.map((recipe) => {
                 return (
-                  <Card
-                    className={classes.card}
-                    key={recipe.id}
-                  >
+                  <Card className={classes.card} key={recipe.id}>
                     <div className={classes.details}>
                       <CardContent className={classes.content}>
                         <Typography variant="h5">
@@ -145,11 +142,10 @@ const RecipesBase = (props) => {
                             )}
                         </Typography>
                         <Typography>
-                          # of Ingredients:{' '}
-                          {recipe.ingredients.length}
+                          {`No. of Ingredients: ${recipe.ingredients.length}`}
                         </Typography>
                         <Typography>
-                          {`# of Instructions: ${recipe.instructions.length}`}
+                          {`No. of Instructions: ${recipe.instructions.length}`}
                         </Typography>
                         <Typography>
                           Author: {recipe.author.username}
@@ -174,12 +170,12 @@ const RecipesBase = (props) => {
                         </Link>
                       </CardContent>
                     </div>
-                      {recipe.imageUrl && (
-                        <CardMedia 
-                          className={classes.media}
-                          image={recipe.imageUrl}
-                        />
-                      )}
+                    {recipe.imageUrl && (
+                      <CardMedia
+                        className={classes.media}
+                        image={recipe.imageUrl}
+                      />
+                    )}
                   </Card>
                 );
               })}
