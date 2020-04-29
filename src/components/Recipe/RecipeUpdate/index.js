@@ -9,6 +9,8 @@ import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
+import Rating from '@material-ui/lab/Rating';
+import Box from '@material-ui/core/Box';
 
 import * as routes from '../../../constants/routes';
 import withSession from '../../Session/withSession';
@@ -108,7 +110,8 @@ const useStyles = (theme) => {
       color: theme.palette.error.contrastText,
       width: '100%'
     },
-    imgPreview: {}
+    imgPreview: {},
+    box: {}
   };
 };
 
@@ -134,10 +137,8 @@ const RecipeUpdateForm = (props) => {
     get(data, 'recipe.imageUrl')
   );
 
-  const onIdChange = (event) => setId(event.target.value);
   const onNameChange = (event) => setName(event.target.value);
-  const onRatingChange = (event) =>
-    setRating(Number(event.target.value));
+  const onRatingChange = (event, newRating) => setRating(newRating);
   const onOriginUrlChange = (event) =>
     setOriginUrl(event.target.value);
   const onOriginTextChange = (event) =>
@@ -237,24 +238,14 @@ const RecipeUpdateForm = (props) => {
                   name="name"
                   className={classes.textField}
                 />
-                {/* TODO: move to stars */}
-                {/* TODO: figure out bugs here */}
-                <TextField
-                  id="rating-filled-required"
-                  label="Recipe Rating"
-                  variant="outlined"
-                  value={rating}
-                  onChange={onRatingChange}
-                  placeholder="Recipe Rating"
-                  name="rating"
-                  type="number"
-                  className={classes.textField}
-                  inputProps={{
-                    step: 1,
-                    min: 1,
-                    max: 5
-                  }}
-                />
+                <Box
+                  mb={3}
+                  borderColor="transparent"
+                >
+                  <Typography component="legend">Rating</Typography>
+                  <Rating value={rating} onChange={onRatingChange} />
+                </Box>
+
                 {/* TODO: figure out nulling */}
                 <TextField
                   id="cooking-time-filled"
