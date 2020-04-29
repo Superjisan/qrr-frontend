@@ -10,7 +10,10 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Container from '@material-ui/core/Container';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import * as routes from '../../../constants/routes';
 import withSession from '../../Session/withSession';
@@ -35,9 +38,11 @@ const GET_RECIPE_INSTRUCTIONS = gql`
 
           qty
           item {
+            id
             name
           }
           uom {
+            id
             name
             alias
           }
@@ -86,20 +91,21 @@ const Instructions = (props) => {
                     <ListItem
                       key={`instruction-${instruction.id}-ingredients-${ingredient.id}`}
                     >
+                      <ListItemIcon>
+                        <Checkbox />
+                      </ListItemIcon>
                       <ListItemText
                         primary={`Item: ${get(
                           ingredient,
-                          'item.name'
-                        )}`}
-                        secondary={`Quantity: ${get(
-                          ingredient,
                           'qty'
                         )} ${
-                          get(ingredient, 'uom') &&
-                          ` 
-                                ${get(ingredient, 'uom.name')} - 
-                                ${get(ingredient, 'uom.alias')}`
-                        }`}
+                          get(ingredient, 'uom') ?
+                          `${get(ingredient, 'uom.name')}` : ""
+                        } ${get(
+                          ingredient,
+                          'item.name'
+                        )}`}
+                        
                       />
                     </ListItem>
                   );
@@ -117,7 +123,7 @@ const InstructionsView = (props) => {
   let { recipeId } = useParams();
   const { classes } = props;
   return (
-    <>
+    <Container maxWidth="sm">
       <Link to={routes.LANDING}>
         <Button variant="outlined" color="secondary">
           Back To Recipes
@@ -144,7 +150,7 @@ const InstructionsView = (props) => {
           );
         }}
       </Query>
-    </>
+    </Container>
   );
 };
 
