@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 
 import * as routes from '../../../constants/routes';
 import withSession from '../../Session/withSession';
@@ -20,9 +21,11 @@ const GET_RECIPE_INGREDIENTS = gql`
         id
         qty
         item {
+          id
           name
         }
         uom {
+          id
           name
           alias
         }
@@ -56,18 +59,11 @@ const Ingredients = (props) => {
             key={`ingredient-${ingredient.id}`}
             className={classes.paperRoot}
           >
-            <Typography>
-              Item: {get(ingredient, 'item.name')}
+            <Typography variant="h5">
+              {`${get(ingredient, 'qty')} ${
+                get(ingredient, 'uom') ? ingredient.uom.name : ''
+              } ${get(ingredient, 'item.name')}`}
             </Typography>
-            <Typography>
-              Quantity: {get(ingredient, 'qty')}
-            </Typography>
-            {get(ingredient, 'uom') && (
-              <Typography>
-                Unit Of Measure: {get(ingredient, 'uom.name')} -{' '}
-                {get(ingredient, 'uom.alias')}
-              </Typography>
-            )}
           </Paper>
         );
       })}
@@ -79,7 +75,7 @@ const IngredientsView = (props) => {
   let { recipeId } = useParams();
   const { classes } = props;
   return (
-    <>
+    <Container maxWidth="sm">
       <Link to={routes.LANDING}>
         <Button variant="outlined" color="secondary">
           Back To Recipes
@@ -111,7 +107,7 @@ const IngredientsView = (props) => {
           );
         }}
       </Query>
-    </>
+    </Container>
   );
 };
 
