@@ -116,7 +116,8 @@ const useStyles = (theme) => {
     },
     details: {
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      width: '100%'
     },
     content: {
       flex: '1 0 auto'
