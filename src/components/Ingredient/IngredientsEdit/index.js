@@ -40,7 +40,7 @@ const GET_RECIPE_INGREDIENTS = gql`
 
 const useStyles = (theme) => ({
   linkButton: {
-    width: '`100%'
+    marginLeft: 10
   },
   paperRoot: {
     paddingTop: theme.spacing(2),
@@ -118,7 +118,7 @@ const IngredientsEdit = (props) => {
         </Button>
       </Link>
       <Link to={`/update-recipe/${recipeId}`}>
-        <Button variant="outlined" color="secondary">
+        <Button  className={classes.linkButton} variant="outlined" color="secondary">
           Back To Recipe Edit
         </Button>
       </Link>
