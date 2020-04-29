@@ -134,7 +134,7 @@ const InstructionsView = (props) => {
         {({ data, loading, error }) => {
           return (
             <>
-              <Typography variant="h2">
+              <Typography variant="h4">
                 {get(data, 'recipe.name')} Instructions
               </Typography>
               {get(data, 'recipe.instructions') && !loading ? (
