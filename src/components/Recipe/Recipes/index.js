@@ -12,6 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
 import { Edit, Cached, Visibility, Search } from '@material-ui/icons';
+import Rating from '@material-ui/lab/Rating';
+import Box from '@material-ui/core/Box';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
 import * as routes from '../../../constants/routes';
@@ -101,12 +103,12 @@ const RecipesBase = (props) => {
   const { classes, session } = props;
   const [name, setName] = useState('');
 
-  const onNameChange = event => {
+  const onNameChange = (event) => {
     setName(event.target.value);
-  }
+  };
 
   return (
-    <Query query={GET_RECIPE_BY_NAME} variables={{name}}>
+    <Query query={GET_RECIPE_BY_NAME} variables={{ name }}>
       {({ data, loading, error, refetch }) => {
         return (
           <Container maxWidth="sm">
@@ -126,7 +128,7 @@ const RecipesBase = (props) => {
               label="Search for Recipe Name"
               placeholder="Recipe Name"
               className={classes.textField}
-              onChange={event => onNameChange(event)}
+              onChange={(event) => onNameChange(event)}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -135,7 +137,7 @@ const RecipesBase = (props) => {
                 )
               }}
             />
-            
+
             {session && session.me && (
               <Link to={routes.ADD_RECIPE}>
                 <Button
@@ -182,6 +184,22 @@ const RecipesBase = (props) => {
                           <Typography>
                             Cooking Time: {recipe.cookingTime}
                           </Typography>
+                        )}
+                        {recipe.rating && (
+                          <Box
+                            mb={3}
+                            mt={1}
+                            borderColor="transparent"
+                          >
+                            <Typography component="legend">
+                              Rating
+                            </Typography>
+                            <Rating
+                              name="rating"
+                              value={recipe.rating}
+                              disabled
+                            />
+                          </Box>
                         )}
                         <Link to={`/view-ingredients/${recipe.id}`}>
                           <Button

@@ -9,6 +9,8 @@ import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import Rating from '@material-ui/lab/Rating';
+import Box from '@material-ui/core/Box';
 
 import { withStyles, Typography } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
@@ -148,6 +150,14 @@ const RecipeView = (props) => {
                         Cooking Time:{' '}
                         {get(data, 'recipe.cookingTime')}
                       </Typography>
+                    )}
+                    {get(data, 'recipe.rating') && (
+                      <Box mb={3} mt={1} borderColor="transparent">
+                        <Typography component="legend">
+                          Rating
+                        </Typography>
+                        <Rating value={data.recipe.rating} disabled />
+                      </Box>
                     )}
                     {get(data, 'recipe.originUrl') && (
                       <Typography>
