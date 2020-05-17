@@ -84,7 +84,7 @@ export const InstructionIngredients = (props) => {
                   <Checkbox />
                 </ListItemIcon>
                 <ListItemText
-                  primary={`Item: ${getIngredientDisplay({
+                  primary={`${getIngredientDisplay({
                     ingredient
                   })}`}
                 />
