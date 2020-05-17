@@ -61,6 +61,11 @@ const useStyles = (theme) => ({
   linkButton: {
     marginLeft: 10
   },
+  addRecipeButton: {
+    width: '100%',
+    marginTop: 10,
+    marginBottom: 10
+  },
   paperRoot: {
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
@@ -81,6 +86,15 @@ const Instructions = (props) => {
   const isAllowedToEdit = me && data.recipe.author.id === me.id;
   return (
     <div>
+      <Link to={`/add-instruction/${data.recipe.id}`}>
+        <Button
+          className={classes.addRecipeButton}
+          variant="contained"
+          color="secondary"
+        >
+          Add Instruction
+        </Button>
+      </Link>
       {data.recipe.instructions.map((instruction) => {
         return (
           <Paper
@@ -103,15 +117,7 @@ const Instructions = (props) => {
           </Paper>
         );
       })}
-      <Link to={`/add-instruction/${data.recipe.id}`}>
-        <Button
-          className={classes.linkButton}
-          variant="contained"
-          color="secondary"
-        >
-          Add Instruction
-        </Button>
-      </Link>
+      
     </div>
   );
 };
