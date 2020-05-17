@@ -1,7 +1,7 @@
 import { get, isEmpty } from 'lodash';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
-import React, { Component } from 'react';
+import React from 'react';
 import { Link, useParams, withRouter } from 'react-router-dom';
 
 import Paper from '@material-ui/core/Paper';
@@ -17,6 +17,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 import * as routes from '../../../constants/routes';
 import withSession from '../../Session/withSession';
+
+import { getIngredientDisplay } from '../utils';
 
 const GET_RECIPE_INSTRUCTIONS = gql`
   query($recipeId: ID!) {
@@ -66,6 +68,35 @@ const useStyles = (theme) => ({
   }
 });
 
+export const InstructionIngredients = (props) => {
+  const { instruction } = props;
+  return (
+    <>
+      {!isEmpty(get(instruction, 'ingredients')) && (
+        <List>
+          <Typography variant="subtitle2">Ingredients</Typography>
+          {get(instruction, 'ingredients').map((ingredient) => {
+            return (
+              <ListItem
+                key={`instruction-${instruction.id}-ingredients-${ingredient.id}`}
+              >
+                <ListItemIcon>
+                  <Checkbox />
+                </ListItemIcon>
+                <ListItemText
+                  primary={`Item: ${getIngredientDisplay({
+                    ingredient
+                  })}`}
+                />
+              </ListItem>
+            );
+          })}
+        </List>
+      )}
+    </>
+  );
+};
+
 const Instructions = (props) => {
   const { data, error, classes } = props;
   return (
@@ -81,37 +112,7 @@ const Instructions = (props) => {
               {get(instruction, 'text')}
             </Typography>
 
-            {!isEmpty(get(instruction, 'ingredients')) && (
-              <List>
-                <Typography variant="subtitle2">
-                  Ingredients
-                </Typography>
-                {get(instruction, 'ingredients').map((ingredient) => {
-                  return (
-                    <ListItem
-                      key={`instruction-${instruction.id}-ingredients-${ingredient.id}`}
-                    >
-                      <ListItemIcon>
-                        <Checkbox />
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={`Item: ${get(
-                          ingredient,
-                          'qty'
-                        )} ${
-                          get(ingredient, 'uom') ?
-                          `${get(ingredient, 'uom.name')}` : ""
-                        } ${get(
-                          ingredient,
-                          'item.name'
-                        )}`}
-                        
-                      />
-                    </ListItem>
-                  );
-                })}
-              </List>
-            )}
+            <InstructionIngredients instruction={instruction} />
           </Paper>
         );
       })}
