@@ -16,6 +16,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import * as routes from '../../../constants/routes';
 import withSession from '../../Session/withSession';
+import {InstructionIngredients} from "../InstructionsView/index";
 
 const GET_RECIPE_INSTRUCTIONS = gql`
   query($recipeId: ID!) {
@@ -98,37 +99,7 @@ const Instructions = (props) => {
               {get(instruction, 'text')}
             </Typography>
 
-            {!isEmpty(get(instruction, 'ingredients')) && (
-              <List>
-                <Typography variant="subtitle2">
-                  Ingredients
-                </Typography>
-                {get(instruction, 'ingredients').map((ingredient) => {
-                  return (
-                    <ListItem
-                      key={`instruction-${instruction.id}-${ingredient.id}`}
-                    >
-                      <ListItemText
-                        primary={`Item: ${get(
-                          ingredient,
-                          'item.name'
-                        )}`}
-                        secondary={`Quantity: ${get(
-                          ingredient,
-                          'qty'
-                        )} ${
-                          get(ingredient, 'uom')
-                            ? ` 
-                                ${get(ingredient, 'uom.name')} - 
-                                ${get(ingredient, 'uom.alias')}`
-                            : ''
-                        }`}
-                      />
-                    </ListItem>
-                  );
-                })}
-              </List>
-            )}
+            <InstructionIngredients instruction={instruction} />
           </Paper>
         );
       })}
