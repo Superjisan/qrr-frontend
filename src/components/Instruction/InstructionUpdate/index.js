@@ -42,6 +42,7 @@ const UPDATE_INSTRUCTION = gql`
       category
       ingredients {
         item {
+          id
           name
         }
       }
