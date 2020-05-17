@@ -1,22 +1,22 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
-import { get, isEmpty } from 'lodash';
+import { get } from 'lodash';
 import { Link, useParams, withRouter } from 'react-router-dom';
 
-import List from '@material-ui/core/List';
 import { Edit, Cached } from '@material-ui/icons';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-import ListItem from '@material-ui/core/ListItem';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-import ListItemText from '@material-ui/core/ListItemText';
 
 import * as routes from '../../../constants/routes';
 import withSession from '../../Session/withSession';
-import { InstructionIngredients, InstructionCategory } from '../InstructionsView/index';
+import {
+  InstructionIngredients,
+  InstructionCategory
+} from '../InstructionsView/index';
 
 const GET_RECIPE_INSTRUCTIONS = gql`
   query($recipeId: ID!) {
@@ -113,7 +113,7 @@ const Instructions = (props) => {
             <Typography variant="body1">
               {get(instruction, 'text')}
             </Typography>
-            
+
             <InstructionCategory instruction={instruction} />
             <InstructionIngredients instruction={instruction} />
           </Paper>

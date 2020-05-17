@@ -112,7 +112,7 @@ export const InstructionCategory = (props) => {
 };
 
 const Instructions = (props) => {
-  const { data, error, classes } = props;
+  const { data, classes } = props;
   return (
     <div>
       {data.recipe.instructions.map((instruction) => {

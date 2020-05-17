@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -42,7 +42,7 @@ const useStyles = (theme) => ({
 });
 
 const RecipeCreate = (props) => {
-  const { session, classes } = props;
+  const { session, classes, history } = props;
 
   const [name, setName] = useState('');
   const [isSuccessOpen, setSuccessOpen] = useState(false);
@@ -62,6 +62,7 @@ const RecipeCreate = (props) => {
 
         setName('');
         setSuccessOpen(true)
+        history.push(`update-recipe/${recipe.data.addRecipe.id}`)
       }
     } catch (error) {
       console.error(error);
@@ -158,5 +159,5 @@ const RecipeCreate = (props) => {
 };
 
 export default withStyles(useStyles, { withTheme: true })(
-  withSession(RecipeCreate)
+  withRouter(RecipeCreate)
 );

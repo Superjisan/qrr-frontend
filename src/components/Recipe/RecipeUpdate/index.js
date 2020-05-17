@@ -297,6 +297,7 @@ const RecipeUpdateForm = (props) => {
                       Image Preview
                     </Typography>
                     <img
+                      alt="recipe"
                       className={classes.imgPreview}
                       src={imageUrl}
                     />

@@ -121,7 +121,6 @@ const SignUpForm = (props) => {
             className={classes.textField}
             required
             variant="outlined"
-            className={classes.textField}
             name="username"
             value={username}
             onChange={onUsernameChange}
@@ -132,7 +131,6 @@ const SignUpForm = (props) => {
             className={classes.textField}
             required
             variant="outlined"
-            className={classes.textField}
             name="email"
             value={email}
             onChange={onEmailChange}
@@ -143,7 +141,6 @@ const SignUpForm = (props) => {
             className={classes.textField}
             required
             variant="outlined"
-            className={classes.textField}
             name="password"
             value={password}
             onChange={onPasswordChange}
@@ -154,7 +151,6 @@ const SignUpForm = (props) => {
             className={classes.textField}
             required
             variant="outlined"
-            className={classes.textField}
             name="passwordConfirmation"
             value={passwordConfirmation}
             onChange={onPasswordConfirmationChange}

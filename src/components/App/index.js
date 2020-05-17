@@ -59,7 +59,7 @@ const App = ({ session, refetch }) => (
       <Route
         exact
         path={routes.ADD_RECIPE}
-        component={() => <RecipeCreate />}
+        component={() => <RecipeCreate session={session} />}
       />
       <Route
         path={routes.VIEW_RECIPE}
