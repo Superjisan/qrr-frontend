@@ -16,6 +16,7 @@ import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 
+import { getIngredientDisplay } from '../utils';
 import Alert from '../../Alert';
 import ErrorMessage from '../../Error';
 
@@ -131,6 +132,11 @@ const useStyles = (theme) => ({
     backgroundColor: theme.palette.error.main,
     color: theme.palette.error.contrastText,
     width: '100%'
+  },
+  inputRoot: {
+    '& .MuiInput-input' : {
+      height: 40
+    }
   }
 });
 
@@ -280,10 +286,15 @@ const InstructionUpdateForm = (props) => {
                   variant="outlined"
                   labelId="ingredient-multiple-chip-label"
                   id="ingredient-ids-chip"
+                  className={classes.inputRoot}
                   multiple
                   value={ingredientIds}
                   onChange={onIngredientIdsChange}
-                  input={<Input id="ingredient-ids-multiple-chip" />}
+                  input={
+                    <Input
+                      id="ingredient-ids-multiple-chip"
+                    />
+                  }
                   renderValue={(selected) => (
                     <div className={classes.chips}>
                       {selected.map((value) => {
@@ -295,12 +306,9 @@ const InstructionUpdateForm = (props) => {
                           return (
                             <Chip
                               key={value}
-                              label={`${
-                                ingredientBasedOnId.item.name
-                              } - ${ingredientBasedOnId.qty} ${
-                                ingredientBasedOnId.uom &&
-                                `- ${ingredientBasedOnId.uom.name}`
-                              } `}
+                              label={`${getIngredientDisplay({
+                                ingredient: ingredientBasedOnId
+                              })}`}
                               className={classes.chip}
                             />
                           );
@@ -316,11 +324,7 @@ const InstructionUpdateForm = (props) => {
                         key={ingredient.id}
                         value={ingredient.id}
                       >
-                        {`${ingredient.item.name} - ${
-                          ingredient.qty
-                        } ${
-                          ingredient.uom && `- ${ingredient.uom.name}`
-                        } `}
+                        {`${getIngredientDisplay({ ingredient })}`}
                       </MenuItem>
                     )
                   )}
