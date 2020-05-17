@@ -16,7 +16,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import * as routes from '../../../constants/routes';
 import withSession from '../../Session/withSession';
-import {InstructionIngredients} from "../InstructionsView/index";
+import { InstructionIngredients, InstructionCategory } from '../InstructionsView/index';
 
 const GET_RECIPE_INSTRUCTIONS = gql`
   query($recipeId: ID!) {
@@ -29,6 +29,7 @@ const GET_RECIPE_INSTRUCTIONS = gql`
       instructions {
         id
         text
+        category
         textIngredients {
           wordIndex
           ingredientId
@@ -112,12 +113,12 @@ const Instructions = (props) => {
             <Typography variant="body1">
               {get(instruction, 'text')}
             </Typography>
-
+            
+            <InstructionCategory instruction={instruction} />
             <InstructionIngredients instruction={instruction} />
           </Paper>
         );
       })}
-      
     </div>
   );
 };
@@ -133,7 +134,11 @@ const InstructionsEdit = (props) => {
         </Button>
       </Link>
       <Link to={`/update-recipe/${recipeId}`}>
-        <Button variant="outlined" color="secondary" className={classes.linkButton}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          className={classes.linkButton}
+        >
           Back To Recipe Edit
         </Button>
       </Link>

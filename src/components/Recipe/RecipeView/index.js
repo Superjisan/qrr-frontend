@@ -18,7 +18,7 @@ import Button from '@material-ui/core/Button';
 import MuiLink from '@material-ui/core/Link';
 
 import * as routes from '../../../constants/routes';
-import {InstructionIngredients} from "../../Instruction/InstructionsView";
+import {InstructionIngredients, InstructionCategory} from "../../Instruction/InstructionsView";
 
 const GET_RECIPE = gql`
   query($id: ID!) {
@@ -46,6 +46,7 @@ const GET_RECIPE = gql`
       instructions {
         id
         text
+        category
         ingredients {
           id
           qty
@@ -224,6 +225,7 @@ const RecipeView = (props) => {
                       <Typography variant="body1">
                         {get(instruction, 'text')}
                       </Typography>
+                      <InstructionCategory instruction={instruction} />
                       <InstructionIngredients instruction={instruction} />
                     </Paper>
                   );

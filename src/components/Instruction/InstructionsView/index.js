@@ -26,6 +26,7 @@ const GET_RECIPE_INSTRUCTIONS = gql`
       name
       instructions {
         text
+        category
         textIngredients {
           wordIndex
           ingredientId
@@ -97,6 +98,19 @@ export const InstructionIngredients = (props) => {
   );
 };
 
+export const InstructionCategory = (props) => {
+  const { instruction } = props;
+  return (
+    <>
+      {get(instruction, 'category') && (
+        <Typography variant="body1">
+          <strong>Category:</strong> {get(instruction, 'category')}
+        </Typography>
+      )}
+    </>
+  );
+};
+
 const Instructions = (props) => {
   const { data, error, classes } = props;
   return (
@@ -111,7 +125,7 @@ const Instructions = (props) => {
             <Typography variant="body1">
               {get(instruction, 'text')}
             </Typography>
-
+            <InstructionCategory instruction={instruction} />
             <InstructionIngredients instruction={instruction} />
           </Paper>
         );
