@@ -11,3 +11,7 @@ Inital code generated from[Read more about it in this tutorial to build it yours
 * `npm install`
 * `npm start`
 * visit `http://localhost:3000`
+
+## Deploy
+
+* `npm run deploy`

@@ -102,7 +102,8 @@ const IngredientUpdateForm = (props) => {
     data,
     error,
     loading,
-    ingredientId
+    ingredientId,
+    refetch
   } = props;
   const recipeId = data.ingredient.recipe.id;
 
@@ -136,6 +137,7 @@ const IngredientUpdateForm = (props) => {
       const updatedIngredient = await updateIngredient();
       if (updatedIngredient) {
         setSuccessOpen(true);
+        refetch();
       }
     } catch (err) {
       setErrorOpen(true);
@@ -337,13 +339,14 @@ const IngredientUpdate = (props) => {
         query={GET_INGREDIENT_ITEMS_UOMS}
         variables={{ id: ingredientId }}
       >
-        {({ data, error, loading }) => {
+        {({ data, error, loading, refetch }) => {
           return get(data, 'ingredient') && !loading ? (
             <IngredientUpdateForm
               data={data}
               loading={loading}
               classes={classes}
               history={history}
+              refetch={refetch}
               ingredientId={ingredientId}
             />
           ) : (

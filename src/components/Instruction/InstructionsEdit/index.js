@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { get } from 'lodash';
@@ -126,6 +126,11 @@ const Instructions = (props) => {
 const InstructionsEdit = (props) => {
   let { recipeId } = useParams();
   const { classes, session } = props;
+  const [recipeIdToSet, setRecipeId] = useState(recipeId);
+  useEffect(() => {
+    console.log('coming here');
+  }, []);
+  const variables = { recipeId: recipeIdToSet, date: new Date() };
   return (
     <Container maxWidth="sm">
       <Link to={routes.LANDING}>
@@ -143,7 +148,10 @@ const InstructionsEdit = (props) => {
         </Button>
       </Link>
 
-      <Query query={GET_RECIPE_INSTRUCTIONS} variables={{ recipeId }}>
+      <Query
+        query={GET_RECIPE_INSTRUCTIONS}
+        variables={variables}
+      >
         {({ data, loading, error, refetch }) => {
           return (
             <>

@@ -11,7 +11,8 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
-import { Edit, Cached, Visibility, Search } from '@material-ui/icons';
+import { Edit, Cached, Visibility, Search,  } from '@material-ui/icons';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -112,8 +113,10 @@ const RecipesBase = (props) => {
       {({ data, loading, error, refetch }) => {
         return (
           <Container maxWidth="sm">
+            <Typography variant="h2" align="center">
+              Quarantine Recipe Repository
+            </Typography>
             <Typography variant="h3" align="center">
-              Recipes
               <Button
                 onClick={() => refetch()}
                 color="secondary"
@@ -137,7 +140,7 @@ const RecipesBase = (props) => {
                 )
               }}
             />
-
+            {loading && <LinearProgress variant="query" />}
             {session && session.me && (
               <Link to={routes.ADD_RECIPE}>
                 <Button

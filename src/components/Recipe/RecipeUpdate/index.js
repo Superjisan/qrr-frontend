@@ -116,7 +116,7 @@ const useStyles = (theme) => {
 };
 
 const RecipeUpdateForm = (props) => {
-  const { data, loading, error, classes } = props;
+  const { data, loading, error, classes, refetch } = props;
 
   const [isSuccessOpen, setSuccessOpen] = useState(false);
   const [isErrorOpen, setErrorOpen] = useState(false);
@@ -147,12 +147,13 @@ const RecipeUpdateForm = (props) => {
     setCookingTime(event.target.value);
   const onImageUrlChange = (event) => setImageUrl(event.target.value);
 
-  const onSubmit = async (event, updateRecipe) => {
+  const onSubmit = async (event, updateRecipe, refetch) => {
     event.preventDefault();
     try {
       const recipe = await updateRecipe();
       if (recipe) {
         setSuccessOpen(true);
+        refetch();
         return recipe;
       }
     } catch (error) {
@@ -205,7 +206,7 @@ const RecipeUpdateForm = (props) => {
           imageUrl
         }}
       >
-        {(updateRecipe, mutationProps) => {
+        {(updateRecipe) => {
           return (
             <>
               <Link to={routes.LANDING}>
@@ -225,7 +226,7 @@ const RecipeUpdateForm = (props) => {
                 Recipe Update
               </Typography>
               <form
-                onSubmit={(event) => onSubmit(event, updateRecipe)}
+                onSubmit={(event) => onSubmit(event, updateRecipe,refetch )}
               >
                 <TextField
                   required

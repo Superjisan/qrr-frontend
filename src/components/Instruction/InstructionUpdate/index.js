@@ -1,6 +1,6 @@
 import { get, uniqBy, find } from 'lodash';
 import gql from 'graphql-tag';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Mutation, Query } from 'react-apollo';
 import { Link, useParams, withRouter } from 'react-router-dom';
 
@@ -46,6 +46,11 @@ const UPDATE_INSTRUCTION = gql`
           id
           name
         }
+        uom {
+          id
+          name
+          alias
+        }
       }
     }
   }
@@ -54,6 +59,7 @@ const UPDATE_INSTRUCTION = gql`
 const GET_INSTRUCTION = gql`
   query($id: ID!) {
     instruction(id: $id) {
+      id
       category
       text
       textIngredients {
@@ -159,7 +165,8 @@ const InstructionUpdateForm = (props) => {
     data,
     error,
     loading,
-    instructionId
+    instructionId,
+    refetch
   } = props;
   const recipeId = data.instruction.recipe.id;
 
@@ -185,6 +192,7 @@ const InstructionUpdateForm = (props) => {
       const newInsruction = await updateInstruction();
       if (newInsruction) {
         setSuccessOpen(true);
+        refetch();
       }
     } catch (err) {
       setErrorOpen(true);
@@ -396,7 +404,7 @@ const InstructionUpdate = (props) => {
         query={GET_INSTRUCTION}
         variables={{ id: instructionId }}
       >
-        {({ data, error, loading }) => {
+        {({ data, error, loading, refetch }) => {
           return !get(data, 'loading') && get(data, 'instruction') ? (
             <InstructionUpdateForm
               data={data}
@@ -405,6 +413,7 @@ const InstructionUpdate = (props) => {
               instructionId={instructionId}
               classes={classes}
               history={history}
+              refetch={refetch}
             />
           ) : (
             'loading...'
