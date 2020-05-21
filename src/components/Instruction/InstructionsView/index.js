@@ -66,6 +66,9 @@ const useStyles = (theme) => ({
     paddingRight: theme.spacing(2),
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2)
+  },
+  viewRecipeBtn: {
+    marginLeft: 10
   }
 });
 
@@ -142,6 +145,16 @@ const InstructionsView = (props) => {
       <Link to={routes.LANDING}>
         <Button variant="outlined" color="secondary">
           Back To Recipes
+        </Button>
+      </Link>
+
+      <Link to={`/view-recipe/${recipeId}`}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          className={classes.viewRecipeBtn}
+        >
+          View Recipe
         </Button>
       </Link>
 
