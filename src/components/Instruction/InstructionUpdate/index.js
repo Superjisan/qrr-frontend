@@ -1,4 +1,4 @@
-import { get, find } from 'lodash';
+import { get, find, sortBy } from 'lodash';
 import gql from 'graphql-tag';
 import React, { useState } from 'react';
 import { Mutation, Query } from 'react-apollo';
@@ -342,7 +342,7 @@ const InstructionUpdateForm = (props) => {
                   )}
                   MenuProps={MenuProps}
                 >
-                  {get(data, 'instruction.recipe.ingredients').map(
+                  {sortBy(get(data, 'instruction.recipe.ingredients'), ingredient => ingredient.item.name.toLowerCase()).map(
                     (ingredient) => (
                       <MenuItem
                         key={ingredient.id}

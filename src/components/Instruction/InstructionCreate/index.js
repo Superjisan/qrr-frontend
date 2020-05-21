@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import React, { useState } from 'react';
-import { get, find } from 'lodash';
+import { get, find , sortBy} from 'lodash';
 import { Mutation, Query } from 'react-apollo';
 import { Link, useParams, withRouter } from 'react-router-dom';
 
@@ -241,7 +241,7 @@ const InstructionCreate = (props) => {
                         )}
                         MenuProps={MenuProps}
                       >
-                        {get(data, 'recipe.ingredients').map(
+                        {sortBy(get(data, 'recipe.ingredients'), ingredient => ingredient.item.name.toLowerCase()).map(
                           (ingredient) => (
                             <MenuItem
                               key={ingredient.id}

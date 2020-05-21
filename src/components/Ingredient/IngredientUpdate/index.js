@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import { get, sortBy } from 'lodash';
 import gql from 'graphql-tag';
 import React, { useState } from 'react';
 import { Mutation, Query } from 'react-apollo';
@@ -261,7 +261,7 @@ const IngredientUpdateForm = (props) => {
                 <MenuItem value={undefined}>
                   <em>None</em>
                 </MenuItem>
-                {get(data, 'items', []).map((option) => (
+                {sortBy(get(data, 'items', []), item => item.name.toLowerCase()).map((option) => (
                   <MenuItem key={option.id} value={option.id}>
                     {option.name}
                   </MenuItem>
