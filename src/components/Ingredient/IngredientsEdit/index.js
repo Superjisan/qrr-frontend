@@ -12,6 +12,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 import * as routes from '../../../constants/routes';
+import { getIngredientDisplay } from '../../Instruction/utils';
 
 const GET_RECIPE_INGREDIENTS = gql`
   query($recipeId: ID!) {
@@ -57,6 +58,9 @@ const useStyles = (theme) => ({
   },
   addButton: {
     width: '100%'
+  },
+  headerText: {
+    marginBottom: 10
   }
 });
 
@@ -65,6 +69,17 @@ const Ingredients = (props) => {
   const isAllowedToEdit = me && data.recipe.author.id === me.id;
   return (
     <div>
+      {isAllowedToEdit && (
+        <Link to={`/add-ingredient/${data.recipe.id}`}>
+          <Button
+            className={classes.addButton}
+            variant="contained"
+            color="secondary"
+          >
+            Add Ingredient
+          </Button>
+        </Link>
+      )}
       {data.recipe.ingredients.map((ingredient) => {
         return (
           <Paper
@@ -73,37 +88,55 @@ const Ingredients = (props) => {
             variant="outlined"
           >
             <Typography>
-              Item: {get(ingredient, 'item.name')}
+              {getIngredientDisplay({ ingredient })}
               {isAllowedToEdit && (
                 <Link to={`/update-ingredient/${ingredient.id}`}>
                   <Edit className={classes.fontIcon} />
                 </Link>
               )}
             </Typography>
-            <Typography>
-              Quantity: {get(ingredient, 'qty')}
-            </Typography>
-            {get(ingredient, 'uom') && (
-              <Typography>
-                Unit Of Measure: {get(ingredient, 'uom.name')} -{' '}
-                {get(ingredient, 'uom.alias')}
-              </Typography>
-            )}
           </Paper>
         );
       })}
-      {isAllowedToEdit && (
-        <Link to={`/add-ingredient/${data.recipe.id}`}>
-          <Button
-            className={classes.linkButton}
-            variant="contained"
-            color="secondary"
-          >
-            Add Ingredient
-          </Button>
-        </Link>
-      )}
+      
     </div>
+  );
+};
+
+const IngredientsQuery = (props) => {
+  const { recipeId, classes, session, titleName } = props;
+  return (
+    <Query query={GET_RECIPE_INGREDIENTS} variables={{ recipeId }}>
+      {({ data, loading, error, refetch }) => {
+        const headerText =
+          titleName || `${get(data, 'recipe.name')} Ingredients`;
+        return (
+          <>
+            <Typography variant="h4" className={classes.headerText}>
+              {headerText}
+              <Button
+                onClick={() => refetch()}
+                color="secondary"
+                variant="outlined"
+                className={classes.fontIcon}
+              >
+                <Cached />
+              </Button>
+            </Typography>
+            {get(data, 'recipe.ingredients') && !loading ? (
+              <Ingredients
+                data={data}
+                error={error}
+                classes={classes}
+                me={session.me}
+              />
+            ) : (
+              'loading'
+            )}
+          </>
+        );
+      }}
+    </Query>
   );
 };
 
@@ -118,43 +151,25 @@ const IngredientsEdit = (props) => {
         </Button>
       </Link>
       <Link to={`/update-recipe/${recipeId}`}>
-        <Button  className={classes.linkButton} variant="outlined" color="secondary">
+        <Button
+          className={classes.linkButton}
+          variant="outlined"
+          color="secondary"
+        >
           Back To Recipe Edit
         </Button>
       </Link>
 
-      <Query query={GET_RECIPE_INGREDIENTS} variables={{ recipeId }}>
-        {({ data, loading, error, refetch }) => {
-          return (
-            <>
-              <Typography variant="h4">
-                {get(data, 'recipe.name')} Ingredients
-                <Button
-                  onClick={() => refetch()}
-                  color="secondary"
-                  variant="outlined"
-                  className={classes.fontIcon}
-                >
-                  <Cached />
-                </Button>
-              </Typography>
-              {get(data, 'recipe.ingredients') && !loading ? (
-                <Ingredients
-                  data={data}
-                  error={error}
-                  classes={classes}
-                  me={session.me}
-                />
-              ) : (
-                'loading'
-              )}
-            </>
-          );
-        }}
-      </Query>
+      <IngredientsQuery
+        recipeId={recipeId}
+        classes={classes}
+        session={session}
+      />
     </Container>
   );
 };
+
+export { IngredientsQuery };
 
 export default withStyles(useStyles, { withTheme: true })(
   withRouter(IngredientsEdit)

@@ -17,6 +17,9 @@ import withSession from '../../Session/withSession';
 import ErrorMessage from '../../Error';
 import Alert from '../../Alert';
 
+import {IngredientsQuery} from "../../Ingredient/IngredientsEdit"
+// import InstructionsEdit from "../../Instruction/InstructionsEdit";
+
 const UPDATE_RECIPE = gql`
   mutation(
     $id: ID!
@@ -86,6 +89,14 @@ const useStyles = (theme) => {
         width: '100%'
       }
     },
+    paperRoot: {
+      paddingTop: theme.spacing(2),
+      paddingBottom: theme.spacing(2),
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2),
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2)
+    },
     button: {
       width: `100%`
     },
@@ -108,10 +119,22 @@ const useStyles = (theme) => {
     deleteButton: {
       backgroundColor: theme.palette.error.main,
       color: theme.palette.error.contrastText,
-      width: '100%'
+      width: '100%',
+      marginBottom: 20
     },
     imgPreview: {},
-    box: {}
+    box: {},
+    fontIcon: {
+      float: 'right',
+      marginRight: 5,
+      cursor: 'pointer'
+    },
+    addButton: {
+      width: '100%'
+    },
+    headerText: {
+      marginBottom: 10
+    }
   };
 };
 
@@ -193,7 +216,7 @@ const RecipeUpdateForm = (props) => {
   const isInvalid = name === '';
 
   return (
-    <Container maxWidth="sm">
+    <>
       <Mutation
         mutation={UPDATE_RECIPE}
         variables={{
@@ -320,20 +343,7 @@ const RecipeUpdateForm = (props) => {
           );
         }}
       </Mutation>
-      <Mutation mutation={DELETE_RECIPE} variables={{ id }}>
-        {(deleteRecipe, deleteRecipeMutationProps) => {
-          return (
-            <Button
-              variant="contained"
-              className={classes.deleteButton}
-              onClick={(event) => onDelete(event, deleteRecipe)}
-              style={{ marginTop: 10 }}
-            >
-              Delete Recipe
-            </Button>
-          );
-        }}
-      </Mutation>
+      
       <Link to={`/edit-ingredients/${id}`}>
         <Button
           color="secondary"
@@ -353,6 +363,20 @@ const RecipeUpdateForm = (props) => {
           Edit Instructions
         </Button>
       </Link>
+      <Mutation mutation={DELETE_RECIPE} variables={{ id }}>
+        {(deleteRecipe, deleteRecipeMutationProps) => {
+          return (
+            <Button
+              variant="contained"
+              className={classes.deleteButton}
+              onClick={(event) => onDelete(event, deleteRecipe)}
+              style={{ marginTop: 10 }}
+            >
+              Delete Recipe
+            </Button>
+          );
+        }}
+      </Mutation>
       <Snackbar
         open={isSuccessOpen}
         autoHideDuration={6000}
@@ -371,28 +395,37 @@ const RecipeUpdateForm = (props) => {
           Something Went Wrong
         </Alert>
       </Snackbar>
-    </Container>
+    </>
   );
 };
 
 const RecipeUpdate = (props) => {
   let { id } = useParams();
-  const { classes, history } = props;
+  const { classes, history, session } = props;
   return (
-    <Query query={GET_RECIPE} variables={{ id }}>
-      {(queryProps) => {
-        return get(queryProps, 'data.recipe') &&
-          !get(queryProps, 'loading') ? (
-          <RecipeUpdateForm
-            {...queryProps}
-            classes={classes}
-            history={history}
-          />
-        ) : (
-          <div>Loading...</div>
-        );
-      }}
-    </Query>
+    <Container maxWidth="sm">
+
+      <Query query={GET_RECIPE} variables={{ id }}>
+        {(queryProps) => {
+          return get(queryProps, 'data.recipe') &&
+            !get(queryProps, 'loading') ? (
+            <RecipeUpdateForm
+              {...queryProps}
+              classes={classes}
+              history={history}
+            />
+          ) : (
+            <div>Loading...</div>
+          );
+        }}
+      </Query>
+      <IngredientsQuery 
+        classes={classes}
+        session={session}
+        recipeId={id}
+        titleName={"Ingredients"}
+      />
+    </Container>
   );
 };
 
