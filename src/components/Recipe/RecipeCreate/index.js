@@ -11,7 +11,6 @@ import { withStyles, Typography } from '@material-ui/core';
 
 import Alert from "../../Alert";
 import ErrorMessage from '../../Error';
-import withSession from '../../Session/withSession';
 
 import * as routes from '../../../constants/routes';
 
@@ -27,7 +26,7 @@ const ADD_RECIPE = gql`
   }
 `;
 
-const useStyles = (theme) => ({
+const useStyles = () => ({
   textField: {
     marginTop: 10,
     marginBottom: 10,
@@ -49,7 +48,7 @@ const RecipeCreate = (props) => {
   const [isErrorOpen, setErrorOpen] = useState(false);
 
   const onChange = (event) => {
-    const { name, value } = event.target;
+    const { value } = event.target;
     setName(value);
   };
 
@@ -105,7 +104,7 @@ const RecipeCreate = (props) => {
       {session && session.me ? (
         <Mutation mutation={ADD_RECIPE} variables={{ name }}>
           {(addRecipe, mutationProps) => {
-            const { data, loading, error } = mutationProps;
+            const { loading, error } = mutationProps;
             return (
               <form onSubmit={(event) => onSubmit(event, addRecipe)}>
                 <TextField

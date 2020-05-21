@@ -1,7 +1,7 @@
 import { get } from 'lodash';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
-import React, { Component } from 'react';
+import React from 'react';
 import { Link, useParams, withRouter } from 'react-router-dom';
 
 import Paper from '@material-ui/core/Paper';
@@ -52,7 +52,7 @@ const useStyles = (theme) => ({
 });
 
 const Ingredients = (props) => {
-  const { data, error, classes } = props;
+  const { data, classes } = props;
   return (
     <div>
       {data.recipe.ingredients.map((ingredient) => {

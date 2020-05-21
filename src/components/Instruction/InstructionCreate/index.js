@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import React, { useState } from 'react';
-import { get, uniqBy, find } from 'lodash';
+import { get, find } from 'lodash';
 import { Mutation, Query } from 'react-apollo';
 import { Link, useParams, withRouter } from 'react-router-dom';
 

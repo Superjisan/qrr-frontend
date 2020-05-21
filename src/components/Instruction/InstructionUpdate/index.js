@@ -1,6 +1,6 @@
-import { get, uniqBy, find } from 'lodash';
+import { get, find } from 'lodash';
 import gql from 'graphql-tag';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Mutation, Query } from 'react-apollo';
 import { Link, useParams, withRouter } from 'react-router-dom';
 
@@ -334,6 +334,8 @@ const InstructionUpdateForm = (props) => {
                               className={classes.chip}
                             />
                           );
+                        } else {
+                          return null
                         }
                       })}
                     </div>

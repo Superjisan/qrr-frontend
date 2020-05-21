@@ -145,7 +145,7 @@ const RecipeUpdateForm = (props) => {
   const [isSuccessOpen, setSuccessOpen] = useState(false);
   const [isErrorOpen, setErrorOpen] = useState(false);
 
-  const [id, setId] = useState(get(data, 'recipe.id'));
+  const id = get(data, 'recipe.id');
   const [name, setName] = useState(get(data, 'recipe.name'));
   const [rating, setRating] = useState(get(data, 'recipe.rating'));
   const [originUrl, setOriginUrl] = useState(

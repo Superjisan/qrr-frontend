@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { get } from 'lodash';
@@ -84,8 +84,9 @@ const useStyles = (theme) => ({
 });
 
 const Instructions = (props) => {
-  const { data, error, classes, me } = props;
-  const isAllowedToEdit = me && (data.recipe.author.id === me.id || me.role === "ADMIN");
+  const { data, classes, me } = props;
+  const isAllowedToEdit =
+    me && (data.recipe.author.id === me.id || me.role === 'ADMIN');
   return (
     <div>
       <Link to={`/add-instruction/${data.recipe.id}`}>
@@ -124,50 +125,48 @@ const Instructions = (props) => {
   );
 };
 
-const InstructionsQuery = props => {
-  const {classes, recipeId, session, titleName} = props;
-  
+const InstructionsQuery = (props) => {
+  const { classes, recipeId, session, titleName } = props;
+
   return (
-    <Query
-        query={GET_RECIPE_INSTRUCTIONS}
-        variables={{recipeId}}
-      >
-        {({ data, loading, error, refetch }) => {
-          const headerText = titleName || `${get(data, 'recipe.name')} Instructions`
-          return (
-            <>
-              <Typography variant="h4">
-                {headerText}
-                <Button
-                  onClick={() => refetch()}
-                  color="secondary"
-                  variant="outlined"
-                  className={classes.fontIcon}
-                >
-                  <Cached />
-                </Button>
-              </Typography>
-              {get(data, 'recipe.instructions') && !loading ? (
-                <Instructions
-                  data={data}
-                  error={error}
-                  classes={classes}
-                  me={session.me}
-                />
-              ) : (
-                <LinearProgress variant="query" />
-              )}
-            </>
-          );
-        }}
-      </Query>
-  )
-}
+    <Query query={GET_RECIPE_INSTRUCTIONS} variables={{ recipeId }}>
+      {({ data, loading, error, refetch }) => {
+        const headerText =
+          titleName || `${get(data, 'recipe.name')} Instructions`;
+        return (
+          <>
+            <Typography variant="h4">
+              {headerText}
+              <Button
+                onClick={() => refetch()}
+                color="secondary"
+                variant="outlined"
+                className={classes.fontIcon}
+              >
+                <Cached />
+              </Button>
+            </Typography>
+            {get(data, 'recipe.instructions') && !loading ? (
+              <Instructions
+                data={data}
+                error={error}
+                classes={classes}
+                me={session.me}
+              />
+            ) : (
+              <LinearProgress variant="query" />
+            )}
+          </>
+        );
+      }}
+    </Query>
+  );
+};
 
 const InstructionsEdit = (props) => {
   let { recipeId } = useParams();
   const { classes, session } = props;
-  
+
   return (
     <Container maxWidth="sm">
       <Link to={routes.LANDING}>
@@ -185,7 +184,7 @@ const InstructionsEdit = (props) => {
         </Button>
       </Link>
 
-      <InstructionsQuery 
+      <InstructionsQuery
         classes={classes}
         session={session}
         recipeId={recipeId}
@@ -194,9 +193,7 @@ const InstructionsEdit = (props) => {
   );
 };
 
-export {
-  InstructionsQuery
-}
+export { InstructionsQuery };
 
 export default withStyles(useStyles, { withTheme: true })(
   withRouter(withSession(InstructionsEdit))
