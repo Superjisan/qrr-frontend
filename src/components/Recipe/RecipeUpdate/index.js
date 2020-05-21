@@ -18,7 +18,7 @@ import ErrorMessage from '../../Error';
 import Alert from '../../Alert';
 
 import {IngredientsQuery} from "../../Ingredient/IngredientsEdit"
-// import InstructionsEdit from "../../Instruction/InstructionsEdit";
+import {InstructionsQuery} from "../../Instruction/InstructionsEdit";
 
 const UPDATE_RECIPE = gql`
   mutation(
@@ -424,6 +424,12 @@ const RecipeUpdate = (props) => {
         session={session}
         recipeId={id}
         titleName={"Ingredients"}
+      />
+      <InstructionsQuery 
+        classes={classes}
+        session={session}
+        recipeId={id}
+        titleName={"Instructions"}
       />
     </Container>
   );

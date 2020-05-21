@@ -119,6 +119,10 @@ const useStyles = (theme) => ({
   backButton: {
     marginBottom: 10
   },
+  backRecipeButton: {
+    marginBottom: 10,
+    marginLeft: 10
+  },
   saveButton: {
     width: '100%'
   },
@@ -239,6 +243,15 @@ const InstructionUpdateForm = (props) => {
           className={classes.backButton}
         >
           Back To Edit Instructions
+        </Button>
+      </Link>
+      <Link to={`/edit-instructions/${recipeId}`}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          className={classes.backRecipeButton}
+        >
+          Back To Edit Recipe
         </Button>
       </Link>
       <Mutation

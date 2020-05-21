@@ -9,6 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { withStyles } from '@material-ui/core/styles';
 
 import * as routes from '../../../constants/routes';
@@ -62,7 +63,7 @@ const useStyles = (theme) => ({
   linkButton: {
     marginLeft: 10
   },
-  addRecipeButton: {
+  addButton: {
     width: '100%',
     marginTop: 10,
     marginBottom: 10
@@ -89,7 +90,7 @@ const Instructions = (props) => {
     <div>
       <Link to={`/add-instruction/${data.recipe.id}`}>
         <Button
-          className={classes.addRecipeButton}
+          className={classes.addButton}
           variant="contained"
           color="secondary"
         >
@@ -123,40 +124,20 @@ const Instructions = (props) => {
   );
 };
 
-const InstructionsEdit = (props) => {
-  let { recipeId } = useParams();
-  const { classes, session } = props;
-  const [recipeIdToSet, setRecipeId] = useState(recipeId);
-  useEffect(() => {
-    console.log('coming here');
-  }, []);
-  const variables = { recipeId: recipeIdToSet, date: new Date() };
+const InstructionsQuery = props => {
+  const {classes, recipeId, session, titleName} = props;
+  
   return (
-    <Container maxWidth="sm">
-      <Link to={routes.LANDING}>
-        <Button variant="outlined" color="secondary">
-          Back To Recipes
-        </Button>
-      </Link>
-      <Link to={`/update-recipe/${recipeId}`}>
-        <Button
-          variant="outlined"
-          color="secondary"
-          className={classes.linkButton}
-        >
-          Back To Recipe Edit
-        </Button>
-      </Link>
-
-      <Query
+    <Query
         query={GET_RECIPE_INSTRUCTIONS}
-        variables={variables}
+        variables={{recipeId}}
       >
         {({ data, loading, error, refetch }) => {
+          const headerText = titleName || `${get(data, 'recipe.name')} Instructions`
           return (
             <>
               <Typography variant="h4">
-                {get(data, 'recipe.name')} Instructions
+                {headerText}
                 <Button
                   onClick={() => refetch()}
                   color="secondary"
@@ -174,15 +155,48 @@ const InstructionsEdit = (props) => {
                   me={session.me}
                 />
               ) : (
-                'loading'
+                <LinearProgress variant="query" />
               )}
             </>
           );
         }}
       </Query>
+  )
+}
+
+const InstructionsEdit = (props) => {
+  let { recipeId } = useParams();
+  const { classes, session } = props;
+  
+  return (
+    <Container maxWidth="sm">
+      <Link to={routes.LANDING}>
+        <Button variant="outlined" color="secondary">
+          Back To Recipes
+        </Button>
+      </Link>
+      <Link to={`/update-recipe/${recipeId}`}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          className={classes.linkButton}
+        >
+          Back To Recipe Edit
+        </Button>
+      </Link>
+
+      <InstructionsQuery 
+        classes={classes}
+        session={session}
+        recipeId={recipeId}
+      />
     </Container>
   );
 };
+
+export {
+  InstructionsQuery
+}
 
 export default withStyles(useStyles, { withTheme: true })(
   withRouter(withSession(InstructionsEdit))

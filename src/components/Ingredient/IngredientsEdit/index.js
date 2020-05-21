@@ -8,6 +8,7 @@ import { Edit, Cached } from '@material-ui/icons';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
@@ -131,7 +132,7 @@ const IngredientsQuery = (props) => {
                 me={session.me}
               />
             ) : (
-              'loading'
+              <LinearProgress variant="query" />
             )}
           </>
         );
