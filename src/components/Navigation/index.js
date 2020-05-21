@@ -59,7 +59,7 @@ const NavigationAuth = ({ session }) => {
 const NavigationNonAuth = () => {
   return (
     <Link to={routes.SIGN_IN}>
-      <Button bgcolor="contrastText">Sign In</Button>
+      <Button color="secondary" variant="contained">Sign In</Button>
     </Link>
   );
 };
