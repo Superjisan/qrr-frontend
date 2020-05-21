@@ -48,6 +48,9 @@ const useStyles = (theme) => ({
   },
   viewRecipeButton: {
     marginLeft: 10
+  },
+  headerText: {
+    marginTop: 10
   }
 });
 
@@ -85,7 +88,11 @@ const IngredientsView = (props) => {
         </Button>
       </Link>
       <Link to={`/view-recipe/${recipeId}`}>
-        <Button variant="outlined" color="secondary" className={classes.viewRecipeButton}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          className={classes.viewRecipeButton}
+        >
           View Recipe
         </Button>
       </Link>
@@ -94,7 +101,11 @@ const IngredientsView = (props) => {
         {({ data, loading, error }) => {
           return (
             <>
-              <Typography variant="h4">
+              <Typography
+                variant="h5"
+                align="center"
+                className={classes.headerText}
+              >
                 {get(data, 'recipe.name')} Ingredients
               </Typography>
               {get(data, 'recipe.ingredients') && !loading ? (

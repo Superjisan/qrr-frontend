@@ -69,6 +69,9 @@ const useStyles = (theme) => ({
   },
   viewRecipeBtn: {
     marginLeft: 10
+  },
+  headerText: {
+    marginTop: 10
   }
 });
 
@@ -162,7 +165,11 @@ const InstructionsView = (props) => {
         {({ data, loading, error }) => {
           return (
             <>
-              <Typography variant="h4">
+              <Typography
+                variant="h5"
+                align="center"
+                className={classes.headerText}
+              >
                 {get(data, 'recipe.name')} Instructions
               </Typography>
               {get(data, 'recipe.instructions') && !loading ? (

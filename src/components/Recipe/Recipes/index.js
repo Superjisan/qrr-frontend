@@ -114,7 +114,7 @@ const RecipesBase = (props) => {
       {({ data, loading, error, refetch }) => {
         return (
           <Container maxWidth="sm">
-            <Typography variant="h2" align="center">
+            <Typography variant="h3" align="center">
               Quarantine Recipe Repository
             </Typography>
             <Typography variant="h3" align="center">
