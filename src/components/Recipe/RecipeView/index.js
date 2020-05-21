@@ -11,7 +11,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
-
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { withStyles, Typography } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
@@ -233,7 +233,7 @@ const RecipeView = (props) => {
               </Paper>
             </>
           ) : (
-            <div>Loading...</div>
+            <LinearProgress variant="query" />
           );
         }}
       </Query>

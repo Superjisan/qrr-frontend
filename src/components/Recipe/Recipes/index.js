@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { get } from 'lodash';
 import { Query } from 'react-apollo';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -11,7 +12,7 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
-import { Edit, Cached, Visibility, Search,  } from '@material-ui/icons';
+import { Edit, Cached, Visibility, Search } from '@material-ui/icons';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
@@ -155,6 +156,11 @@ const RecipesBase = (props) => {
             {data &&
               data.recipeSearchByName &&
               data.recipeSearchByName.map((recipe) => {
+                const isAllowedToEdit =
+                  (session &&
+                    session.me &&
+                    recipe.author.id === session.me.id) ||
+                  get(session, 'me.role') === 'ADMIN';
                 return (
                   <Card className={classes.card} key={recipe.id}>
                     <div className={classes.details}>
@@ -166,13 +172,11 @@ const RecipesBase = (props) => {
                               className={classes.fontIcon}
                             />
                           </Link>
-                          {session &&
-                            session.me &&
-                            recipe.author.id === session.me.id && (
-                              <Link to={`update-recipe/${recipe.id}`}>
-                                <Edit className={classes.fontIcon} />
-                              </Link>
-                            )}
+                          {isAllowedToEdit && (
+                            <Link to={`update-recipe/${recipe.id}`}>
+                              <Edit className={classes.fontIcon} />
+                            </Link>
+                          )}
                         </Typography>
                         <Typography>
                           {`No. of Ingredients: ${recipe.ingredients.length}`}

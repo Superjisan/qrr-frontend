@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import * as routes from '../../../constants/routes';
 import withSession from '../../Session/withSession';
@@ -190,6 +191,7 @@ const RecipeUpdateForm = (props) => {
     try {
       const deleted = await deleteRecipe();
       if (deleted) {
+        refetch();
         props.history.push(routes.LANDING);
       }
     } catch (error) {
@@ -415,7 +417,7 @@ const RecipeUpdate = (props) => {
               history={history}
             />
           ) : (
-            <div>Loading...</div>
+            <LinearProgress variant="query" />
           );
         }}
       </Query>

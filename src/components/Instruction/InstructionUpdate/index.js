@@ -15,6 +15,7 @@ import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import { getIngredientDisplay } from '../utils';
 import Alert from '../../Alert';
@@ -429,7 +430,7 @@ const InstructionUpdate = (props) => {
               refetch={refetch}
             />
           ) : (
-            'loading...'
+            <LinearProgress variant="query" />
           );
         }}
       </Query>

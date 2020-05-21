@@ -10,6 +10,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import Alert from '../../Alert';
 import ErrorMessage from '../../Error';
@@ -363,7 +364,7 @@ const IngredientUpdate = (props) => {
               ingredientId={ingredientId}
             />
           ) : (
-            'loading...'
+            <LinearProgress  variant="query"/>
           );
         }}
       </Query>

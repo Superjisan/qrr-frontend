@@ -67,7 +67,7 @@ const useStyles = (theme) => ({
 
 const Ingredients = (props) => {
   const { data, error, classes, me } = props;
-  const isAllowedToEdit = me && data.recipe.author.id === me.id;
+  const isAllowedToEdit = me && (data.recipe.author.id === me.id || me.role === "ADMIN");
   return (
     <div>
       {isAllowedToEdit && (
